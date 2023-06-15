@@ -10,15 +10,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,13 +31,18 @@ import com.dsc.form_builder.TextFieldState
 import com.loki.britam.presentation.common.Input
 import com.loki.britam.presentation.navigation.Screens
 import com.loki.britam.presentation.theme.BritamTheme
+import kotlinx.coroutines.delay
+import okhttp3.internal.wait
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
     openScreen: (String) -> Unit,
     openAndPopScreen: (String, String) -> Unit
 ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val formState = remember { viewModel.loginFormState }
 
@@ -95,6 +103,8 @@ fun LoginScreen(
         Button(
             onClick = {
                 if (formState.validate()) {
+                    keyboardController?.hide()
+
                     viewModel.login(
                         email.value,
                         password.value,

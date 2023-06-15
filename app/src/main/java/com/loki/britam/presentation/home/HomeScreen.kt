@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loki.britam.data.Company
 import com.loki.britam.data.companies
+import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.theme.BritamTheme
 
 @Composable
@@ -146,38 +147,6 @@ fun SearchSection(
                 }
             }
         )
-    }
-}
-
-@Composable
-fun HeaderSection(
-    modifier: Modifier = Modifier,
-    header: String,
-    trailingText: String? = null,
-    onClickTrailingText: () -> Unit = {}
-) {
-
-    Box(modifier = modifier.fillMaxWidth()) {
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = header,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            if (trailingText != null) {
-                TextButton(onClick = { onClickTrailingText() }) {
-                    Text(text = trailingText)
-                }
-            }
-        }
-
     }
 }
 

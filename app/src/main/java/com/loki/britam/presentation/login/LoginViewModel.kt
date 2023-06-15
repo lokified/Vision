@@ -30,10 +30,6 @@ class LoginViewModel: ViewModel() {
 
     fun login(email: String, password: String, openAndPopUp: (String, String) -> Unit) {
 
-        viewModelScope.launch {
-
-            delay(3000L)
-            openAndPopUp(Screens.HomeScreen.route, Screens.LoginScreen.route)
-        }
+        openAndPopUp(Screens.HomeScreen.route, Screens.LoginScreen.route)
     }
 }

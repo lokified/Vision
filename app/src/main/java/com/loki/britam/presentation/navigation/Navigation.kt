@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.loki.britam.presentation.AppState
+import com.loki.britam.presentation.BizScreen
 import com.loki.britam.presentation.home.HomeScreen
 import com.loki.britam.presentation.home.HomeViewModel
 import com.loki.britam.presentation.login.LoginScreen
@@ -11,6 +12,8 @@ import com.loki.britam.presentation.login.LoginViewModel
 import com.loki.britam.presentation.onboarding.OnBoardingScreen
 import com.loki.britam.presentation.register.RegisterScreen
 import com.loki.britam.presentation.register.RegisterViewModel
+import com.loki.britam.presentation.wallet.WalletScreen
+import com.loki.britam.presentation.wallet.WalletViewModel
 
 @Composable
 fun Navigation(appState: AppState) {
@@ -55,6 +58,16 @@ fun Navigation(appState: AppState) {
             HomeScreen(
                 viewModel = viewModel
             )
+        }
+
+        composable(route = Screens.BizScreen.route) {
+            BizScreen()
+        }
+
+        composable(route = Screens.WalletScreen.route) {
+
+            val viewModel = WalletViewModel()
+            WalletScreen(viewModel)
         }
     }
 }
