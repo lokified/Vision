@@ -16,12 +16,19 @@
 
 ### Home
 <div display="flex"> 
-  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/985606a0-e059-4590-b86b-d49474897b10" width=30% height=30% >
-  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/9f654741-49e0-4552-a42f-8c3a1e756800" width=30% height=30% >
+  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/5ce9bd24-af15-4544-ac65-5b0d1980c6cb" width=30% height=30% >
+  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/d023eb7b-4e81-493e-9aee-d2bb6879aae8" width=30% height=30% >
 </div>
+
+### Biz
+<div display="flex"> 
+  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/1be9b9a5-b480-479b-ac9f-c479e2f15d65" width=30% height=30% >
+  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/250cb57f-ffbc-4c25-bcce-7c010dae8726" width=30% height=30% >
+</div>
+
 
 ### wallet
 <div display="flex"> 
-  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/396faf14-885a-4f97-a7dc-f520f306f787" width=30% height=30% >
-  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/d6062f75-12c9-4421-b25c-c9bde7aa9a7e" width=30% height=30% >
+  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/39d4045c-988b-4b4b-b8cb-4a5e4f34a46d" width=30% height=30% >
+  <img src="https://github.com/BritamG11/Britam-app/assets/87479198/c7fd82a0-f576-4e7d-b726-6dae1f330dd6" width=30% height=30% >
 </div>
