@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.sp
 fun HeaderSection(
     modifier: Modifier = Modifier,
     header: String,
-    trailingText: String? = null,
-    onClickTrailingText: () -> Unit = {}
+    trailingContent: @Composable () -> Unit = {},
 ) {
 
     Box(modifier = modifier.fillMaxWidth()) {
@@ -35,11 +34,8 @@ fun HeaderSection(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (trailingText != null) {
-                TextButton(onClick = { onClickTrailingText() }) {
-                    Text(text = trailingText)
-                }
-            }
+            trailingContent()
+
         }
 
     }

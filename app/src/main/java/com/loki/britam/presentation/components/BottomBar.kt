@@ -1,6 +1,7 @@
 package com.loki.britam.presentation.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Grain
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Wallet
@@ -65,7 +66,7 @@ val navItems = listOf(
         route = Screens.HomeScreen.route
     ),
     BottomNavItem(
-        icon = Icons.Filled.Menu,
+        icon = Icons.Filled.Grain,
         navTitle = "Biz",
         route = Screens.BizScreen.route
     ),

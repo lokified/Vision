@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Grain
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,7 +67,7 @@ fun TopSection(
     Box(modifier = modifier.fillMaxWidth()) {
 
         Image(
-            imageVector = Icons.Filled.Money,
+            imageVector = Icons.Filled.Grain,
             contentDescription = null,
             modifier = Modifier.align(
                 Alignment.Center
@@ -77,10 +79,10 @@ fun TopSection(
             text = "Login",
             modifier = Modifier.align(Alignment.TopEnd)
                 .padding(4.dp)
-                .clickable { onClick() }
-                .background(color = Color.Black.copy(.3f)),
+                .clickable { onClick() },
             color = Color.White,
-            fontSize = 18.sp
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold
         )
     }
 }

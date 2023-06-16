@@ -23,9 +23,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CallMissed
 import androidx.compose.material.icons.filled.RemoveFromQueue
 import androidx.compose.material.icons.filled.RequestQuote
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.TransitEnterexit
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
@@ -35,6 +37,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -91,8 +94,11 @@ fun WalletScreen(
             item {
                 HeaderSection(
                     header = "Recent Transactions",
-                    trailingText = "See All",
-                    onClickTrailingText = {  },
+                    trailingContent = {
+                        TextButton(onClick = { /*TODO*/ }) {
+                            Text(text = "See All")
+                        }
+                    },
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
@@ -271,7 +277,7 @@ fun WalletActions(
             
             ActionItem(
                 title = "Request",
-                icon = Icons.Filled.RequestQuote,
+                icon = Icons.Filled.CallMissed,
                 onClick = onClick
             )
 
@@ -279,7 +285,7 @@ fun WalletActions(
 
             ActionItem(
                 title = "Withdraw",
-                icon = Icons.Filled.RemoveFromQueue,
+                icon = Icons.Filled.TransitEnterexit,
                 onClick = onClick
             )
             
@@ -430,6 +436,4 @@ fun TransactionCard(
             thickness = 0.5.dp
         )
     }
-
-
 }
