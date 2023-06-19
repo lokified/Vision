@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Input(
+    modifier: Modifier = Modifier,
     placeholder: String,
     value: String,
     label: String = "",
@@ -50,7 +51,7 @@ fun Input(
         placeholder = {
             Text(text = placeholder)
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 4.dp),
         keyboardOptions = KeyboardOptions(
@@ -70,6 +71,36 @@ fun Input(
                 }
             }
         }
+    )
+
+    if (isError) {
+        Text(text = errorMessage, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
+    }
+
+}
+
+@Composable
+fun SheetInput(
+    modifier: Modifier = Modifier,
+    value: String,
+    label: String,
+    onValueChange: (String) -> Unit,
+    errorMessage: String,
+    isError: Boolean,
+) {
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = {
+            onValueChange(it)
+        },
+        isError = isError,
+        label = {
+            Text(text = label, modifier = Modifier.padding(bottom = 8.dp))
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 4.dp),
     )
 
     if (isError) {

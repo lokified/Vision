@@ -1,5 +1,6 @@
 package com.loki.britam.presentation.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,11 +47,13 @@ import androidx.compose.ui.unit.sp
 import com.loki.britam.data.Company
 import com.loki.britam.data.companies
 import com.loki.britam.presentation.common.HeaderSection
+import com.loki.britam.presentation.navigation.Screens
 import com.loki.britam.presentation.theme.BritamTheme
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    openScreen: (String) -> Unit
 ) {
 
     LazyColumn(
@@ -85,7 +89,7 @@ fun HomeScreen(
                 header = "My Insurance",
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                 trailingContent = {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = { openScreen(Screens.InsuranceScreen.route) }) {
                         Text(text = "Explore")
                     }
                 }
@@ -168,7 +172,7 @@ fun NewCompanySection(
                     .size(70.dp)
                     .padding(horizontal = 8.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         shape = RoundedCornerShape(4.dp)
                     )
                     .clickable { onAddCompanyClick() },
@@ -216,7 +220,7 @@ fun BoxItem(
             .size(height = 70.dp, width = 150.dp)
             .padding(horizontal = 8.dp)
             .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = MaterialTheme.colorScheme.secondaryContainer,
                 shape = RoundedCornerShape(4.dp)
             ),
         contentAlignment = Alignment.Center
@@ -237,7 +241,10 @@ fun CompanyCard(
 
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
-            shape = RoundedCornerShape(4.dp)
+            shape = RoundedCornerShape(4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+            )
         ) {
             Text(
                 text = company.name,
@@ -289,13 +296,13 @@ fun CompanyItem(
     }
 }
 
-
 @Preview(
-    showBackground = true
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun HomePreview() {
+fun InsuranceScreenPreview() {
     BritamTheme {
-        HomeScreen(viewModel = HomeViewModel())
+        HomeScreen(viewModel = HomeViewModel(),openScreen = {})
     }
 }
