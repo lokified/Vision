@@ -32,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -42,8 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dsc.form_builder.TextFieldState
 import com.loki.britam.presentation.common.HeaderSection
-import com.loki.britam.presentation.common.Input
-import com.loki.britam.presentation.common.SheetInput
+import com.loki.britam.presentation.common.DefaultInput
 import com.loki.britam.presentation.theme.BritamTheme
 import com.loki.britam.util.NavigationUtils
 
@@ -195,7 +193,7 @@ fun BottomSheet(
         ) {
 
 
-            SheetInput(
+            DefaultInput(
                 label = "Email Address",
                 value = email.value,
                 onValueChange = { email.change(it) },
@@ -205,7 +203,7 @@ fun BottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            SheetInput(
+            DefaultInput(
                 label = "Phone Number",
                 value = phone.value,
                 onValueChange = { phone.change(it) },
@@ -215,7 +213,7 @@ fun BottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            SheetInput(
+            DefaultInput(
                 label = "Message",
                 value = message.value,
                 onValueChange = { message.change(it) },

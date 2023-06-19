@@ -79,7 +79,8 @@ fun HomeScreen(
         item {
             NewCompanySection(
                 companies = viewModel.companies,
-                onAddCompanyClick = {}
+                onAddCompanyClick = { openScreen(Screens.NewCompanyScreen.route) },
+                onCompanyClick = { openScreen(Screens.CompanyScreen.navWithCompanyTitle(it)) }
             )
         }
 
@@ -98,7 +99,10 @@ fun HomeScreen(
 
 
         item {
-            InsuranceSection(insurances = viewModel.insurances)
+            InsuranceSection(
+                insurances = viewModel.insurances,
+                onClick = {  }
+            )
         }
 
 
@@ -158,7 +162,8 @@ fun SearchSection(
 fun NewCompanySection(
     modifier: Modifier = Modifier,
     companies: List<String>,
-    onAddCompanyClick: () -> Unit
+    onAddCompanyClick: () -> Unit,
+    onCompanyClick: (String) -> Unit
 ) {
 
     LazyRow(
@@ -187,7 +192,7 @@ fun NewCompanySection(
         }
 
         items(companies) { name ->
-            BoxItem(name = name)
+            BoxItem(name = name, onClick = onCompanyClick)
         }
     }
 }
@@ -195,7 +200,8 @@ fun NewCompanySection(
 @Composable
 fun InsuranceSection(
     modifier: Modifier = Modifier,
-    insurances: List<String>
+    insurances: List<String>,
+    onClick: (String) -> Unit
 ) {
 
     LazyRow(
@@ -204,7 +210,7 @@ fun InsuranceSection(
     ) {
 
         items(insurances) { name ->
-            BoxItem(name = name)
+            BoxItem(name = name, onClick = onClick)
         }
     }
 }
@@ -212,7 +218,8 @@ fun InsuranceSection(
 @Composable
 fun BoxItem(
     modifier: Modifier = Modifier,
-    name: String
+    name: String,
+    onClick: (String) -> Unit
 ) {
 
     Box(
@@ -222,7 +229,7 @@ fun BoxItem(
             .background(
                 color = MaterialTheme.colorScheme.secondaryContainer,
                 shape = RoundedCornerShape(4.dp)
-            ),
+            ).clickable { onClick(name) },
         contentAlignment = Alignment.Center
     ) {
         Text(
