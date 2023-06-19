@@ -1,6 +1,7 @@
 package com.loki.britam.presentation.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -80,13 +81,14 @@ fun Input(
 }
 
 @Composable
-fun SheetInput(
+fun DefaultInput(
     modifier: Modifier = Modifier,
     value: String,
     label: String,
     onValueChange: (String) -> Unit,
     errorMessage: String,
     isError: Boolean,
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
 
     OutlinedTextField(
@@ -99,8 +101,10 @@ fun SheetInput(
             Text(text = label, modifier = Modifier.padding(bottom = 8.dp))
         },
         modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 4.dp),
+            .fillMaxWidth(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType
+        )
     )
 
     if (isError) {

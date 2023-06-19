@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.loki.britam.presentation.AppState
 import com.loki.britam.presentation.biz.BizScreen
 import com.loki.britam.presentation.biz.BizViewModel
+import com.loki.britam.presentation.company.CompanyScreen
 import com.loki.britam.presentation.home.HomeScreen
 import com.loki.britam.presentation.home.HomeViewModel
 import com.loki.britam.presentation.insurance.ApplyScreen
@@ -15,6 +16,8 @@ import com.loki.britam.presentation.insurance.InsuranceScreen
 import com.loki.britam.presentation.insurance.InsuranceViewModel
 import com.loki.britam.presentation.login.LoginScreen
 import com.loki.britam.presentation.login.LoginViewModel
+import com.loki.britam.presentation.new_company.NewCompanyScreen
+import com.loki.britam.presentation.new_company.NewCompanyViewModel
 import com.loki.britam.presentation.onboarding.OnBoardingScreen
 import com.loki.britam.presentation.register.RegisterScreen
 import com.loki.britam.presentation.register.RegisterViewModel
@@ -85,13 +88,13 @@ fun Navigation(appState: AppState) {
         composable(route = Screens.InsuranceScreen.route) {
 
             InsuranceScreen(
-                openScreen = { appState.navigate(Screens.ApplyScreen.navWithTitle(it)) },
+                openScreen = { appState.navigate(Screens.ApplyScreen.navWithApplyTitle(it)) },
                 popScreen = { appState.popUp() }
             )
         }
 
         composable(
-            route = Screens.ApplyScreen.with(),
+            route = Screens.ApplyScreen.withApplyTitle(),
             arguments = listOf(
                 navArgument(name = TITLE) {
                     type = NavType.StringType
@@ -100,6 +103,29 @@ fun Navigation(appState: AppState) {
         ) {
             val title = it.arguments?.getString(TITLE)!!
             ApplyScreen(title = title, viewModel = InsuranceViewModel(),popScreen = { appState.popUp() })
+        }
+
+        composable(route = Screens.NewCompanyScreen.route) {
+
+            NewCompanyScreen(
+                viewModel = NewCompanyViewModel(),
+                popScreen = { appState.popUp() }
+            )
+        }
+
+        composable(
+            route = Screens.CompanyScreen.withCompanyTitle(),
+            arguments = listOf(
+                navArgument(name = TITLE) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val title = it.arguments?.getString(TITLE)!!
+            CompanyScreen(
+                title = title,
+                popScreen = { appState.popUp() }
+            )
         }
     }
 }
@@ -114,12 +140,22 @@ sealed class Screens(val route: String) {
     object WalletScreen: Screens("wallet_screen")
     object InsuranceScreen: Screens("insurance_screen")
     object ApplyScreen: Screens("apply_screen")
+    object NewCompanyScreen: Screens("new_company_screen")
+    object CompanyScreen: Screens("company_screen")
 
-    fun with(): String {
+    fun withApplyTitle(): String {
         return "${ApplyScreen.route}/{$TITLE}"
     }
 
-    fun navWithTitle(title: String): String {
+    fun navWithApplyTitle(title: String): String {
         return "${ApplyScreen.route}/$title"
+    }
+
+    fun withCompanyTitle(): String {
+        return "${CompanyScreen.route}/{$TITLE}"
+    }
+
+    fun navWithCompanyTitle(title: String): String {
+        return "${CompanyScreen.route}/$title"
     }
 }
