@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Britam</string>
+
+    <string name="britam_biashara_content">This is a simplified combined solution tailored for SMEs. It is designed as a self-rated product, where the customer chooses the different solutions. Political Violence &amp; Terrorism Cover are extended up to a limit. Britam Biashara also offers relaxed Warranties &amp; Conditions. </string>
+    <string name="theft_insurance_content">This provides cover for theft or attempted theft of goods occurring at the Insured\'s business premises, resulting from forcible or violent entry or exit.</string>
+    <string name="cyber_insurance_content">Cyber liability insurance is designed for all businesses, Corporates, Small and Medium Enterprise entities. The cover protects your business against common cyber threats, such as ransomware, and against new techniques used by criminals to steal or interrupt data. The most common threat is data breaches and losses e.g., network security breaches, loss of private data and theft of intellectual property.</string>
+    <string name="fire_insurance_content">Fire Insurance provides protection against loss in the event of a fire. This insurance policy covers loss or damage to property caused by fire, lightning, explosion, earthquake, bushfire, riot and related perils.</string>
+    <string name="liability_insurance_content">Liability insurance offers protection to purchasers against third party insurance claims.</string>
+    <string name="political_insurance_content">Terrorism and political violence (PVT) insurance covers an individual or company against physical loss and damage, as well as business interruption costs, because of a terrorist act or acts of political violence such as riot, strike, civil commotion, revolution, war, civil war, rebellion, insurrection, sabotage, coup d’état and malicious damage, and consequential looting. It can occur as a stand-alone cover or as part of another policy such as Motor Vehicle insurance or Home Insurance commonly called a rider.</string>
+    
+    <string name="home_insurance_content">Home insurance covers your house and belongings against life\'s unexpected events. It covers you against theft, damage by extreme weather, fire, and other losses. Generally, home insurance is categorized by two types of cover — buildings and contents. These can be combined or bought separately for total peace of mind, so the first step is deciding which option is better for you.</string>
+    <string name="motor_insurance_content">At Britam, we understand how much you cherish your car and the need to protect it at all times.
+            That\'s why we offer comprehensive motor insurance to keep your prized possession safe and sound.
+            Our policy covers accidental damage or overturning, loss or damage by fire and theft, malicious damage, and third party liabilities. </string>
+    <string name="burglary_content">Any individual who wants to cover his / her home or business can take this cover. It is a simple and affordable cover option, and its fixed benefit options with premiums quoted upfront provides flexibility to choose as per your needs or requirements. The Optional Business Interruption benefit also gives freedom to choose as per requirements and needs.</string>
+    <string name="accident_content">There are two categories</string>
+    <string name="family_plans_content">There are four categories</string>
+    <string name="funeral_content">There are two categories</string>
+    <string name="unknown_content">Visit our website</string>
 </resources>
