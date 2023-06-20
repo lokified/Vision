@@ -9,6 +9,8 @@ import com.loki.britam.presentation.AppState
 import com.loki.britam.presentation.biz.BizScreen
 import com.loki.britam.presentation.biz.BizViewModel
 import com.loki.britam.presentation.company.CompanyScreen
+import com.loki.britam.presentation.company.CompanyViewModel
+import com.loki.britam.presentation.company.NewExpenseScreen
 import com.loki.britam.presentation.home.HomeScreen
 import com.loki.britam.presentation.home.HomeViewModel
 import com.loki.britam.presentation.insurance.ApplyScreen
@@ -121,9 +123,21 @@ fun Navigation(appState: AppState) {
                 }
             )
         ) {
+
             val title = it.arguments?.getString(TITLE)!!
+            val viewModel = CompanyViewModel()
             CompanyScreen(
                 title = title,
+                viewModel = viewModel,
+                openScreen = { appState.navigate(it) }
+            )
+        }
+
+        composable(route = Screens.NewExpenseScreen.route) {
+            val viewModel = CompanyViewModel()
+
+            NewExpenseScreen(
+                viewModel = viewModel,
                 popScreen = { appState.popUp() }
             )
         }
@@ -142,6 +156,7 @@ sealed class Screens(val route: String) {
     object ApplyScreen: Screens("apply_screen")
     object NewCompanyScreen: Screens("new_company_screen")
     object CompanyScreen: Screens("company_screen")
+    object NewExpenseScreen: Screens("new_expense_screen")
 
     fun withApplyTitle(): String {
         return "${ApplyScreen.route}/{$TITLE}"
