@@ -177,7 +177,7 @@ fun NewCompanySection(
                     .size(70.dp)
                     .padding(horizontal = 8.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                         shape = RoundedCornerShape(4.dp)
                     )
                     .clickable { onAddCompanyClick() },
@@ -227,7 +227,7 @@ fun BoxItem(
             .size(height = 70.dp, width = 150.dp)
             .padding(horizontal = 8.dp)
             .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                color = MaterialTheme.colorScheme.inverseOnSurface,
                 shape = RoundedCornerShape(4.dp)
             ).clickable { onClick(name) },
         contentAlignment = Alignment.Center
@@ -250,7 +250,7 @@ fun CompanyCard(
         Card(
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                containerColor = MaterialTheme.colorScheme.inverseOnSurface
             )
         ) {
             Text(
