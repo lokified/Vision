@@ -17,17 +17,17 @@ val companies = listOf(
         revenue = "100,254"
     ),
     Company(
-        name = "Safaricom",
-        customers = "225,576",
-        profits = "3,268,256",
-        expenditure = "45,154,125",
-        revenue = "100,254,124"
+        name = "Krits",
+        customers = "5,576",
+        profits = "58,256",
+        expenditure = "54,125",
+        revenue = "254,124"
     ),
     Company(
-        name = "Airtel",
-        customers = "221,546",
-        profits = "322,256",
-        expenditure = "544,125",
-        revenue = "5,120,254"
+        name = "Oplib",
+        customers = "546",
+        profits = "22,256",
+        expenditure = "44,125",
+        revenue = "120,254"
     ),
 )

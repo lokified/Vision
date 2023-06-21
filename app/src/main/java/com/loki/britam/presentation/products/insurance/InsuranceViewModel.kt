@@ -1,4 +1,4 @@
-package com.loki.britam.presentation.insurance
+package com.loki.britam.presentation.products.insurance
 
 import androidx.lifecycle.ViewModel
 import com.dsc.form_builder.FormState

@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,11 +88,11 @@ fun HomeScreen(
 
         item {
             HeaderSection(
-                header = "My Insurance",
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                header = "Insurance",
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp),
                 trailingContent = {
                     TextButton(onClick = { openScreen(Screens.InsuranceScreen.route) }) {
-                        Text(text = "Explore")
+                        Text(text = "See More")
                     }
                 }
             )
@@ -99,9 +100,28 @@ fun HomeScreen(
 
 
         item {
-            InsuranceSection(
-                insurances = viewModel.insurances,
-                onClick = {  }
+            ProductSection(
+                products = listOf("Britam Biashara", "Theft Insurance",  "Fire Insurance"),
+                onClick = { openScreen(Screens.ApplyScreen.navWithApplyTitle(it)) }
+            )
+        }
+
+        item {
+            HeaderSection(
+                header = "Invest",
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp),
+                trailingContent = {
+                    TextButton(onClick = { openScreen(Screens.InvestScreen.route) }) {
+                        Text(text = "See More")
+                    }
+                }
+            )
+        }
+
+        item {
+            ProductSection(
+                products = listOf("Balanced Fund", "Equity Fund", "Britam Bond Plus Fund"),
+                onClick = { openScreen(Screens.ApplyScreen.navWithApplyTitle(it)) }
             )
         }
 
@@ -198,9 +218,9 @@ fun NewCompanySection(
 }
 
 @Composable
-fun InsuranceSection(
+fun ProductSection(
     modifier: Modifier = Modifier,
-    insurances: List<String>,
+    products: List<String>,
     onClick: (String) -> Unit
 ) {
 
@@ -209,7 +229,7 @@ fun InsuranceSection(
         modifier = modifier
     ) {
 
-        items(insurances) { name ->
+        items(products) { name ->
             BoxItem(name = name, onClick = onClick)
         }
     }
@@ -235,7 +255,8 @@ fun BoxItem(
         Text(
             text = name,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Normal
+            fontWeight = FontWeight.Normal,
+            textAlign = TextAlign.Center
         )
     }
 }

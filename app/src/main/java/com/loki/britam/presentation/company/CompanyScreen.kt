@@ -41,7 +41,6 @@ import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.navigation.Screens
 import com.loki.britam.presentation.theme.BritamTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompanyScreen(
     title: String,
@@ -96,7 +95,7 @@ fun CompanyScreen(
 
                     item {
                         HeaderSection(
-                            header = "Insurance",
+                            header = "My Insurance",
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
@@ -113,6 +112,25 @@ fun CompanyScreen(
                                 modifier = Modifier.padding(vertical = 4.dp),
                                 companyInsurance = insurance
                             )
+                        }
+                    }
+
+                    item {
+                        HeaderSection(
+                            header = "My Investments",
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+
+                    if (viewModel.investments.isEmpty()) {
+                        item {
+                            EmptyBox(content = "No active Investments")
+                        }
+                    }
+                    else {
+                        items(viewModel.investments) { investment ->
+
+
                         }
                     }
 

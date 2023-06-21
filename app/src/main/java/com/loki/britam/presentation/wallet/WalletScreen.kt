@@ -57,10 +57,13 @@ import com.loki.britam.data.Contact
 import com.loki.britam.data.Transaction
 import com.loki.britam.data.TransactionType
 import com.loki.britam.presentation.common.HeaderSection
+import com.loki.britam.presentation.common.TransactionCard
+import com.loki.britam.presentation.navigation.Screens
 
 @Composable
 fun WalletScreen(
-    viewModel: WalletViewModel
+    viewModel: WalletViewModel,
+    openScreen: (String) -> Unit
 ) {
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -95,7 +98,7 @@ fun WalletScreen(
                 HeaderSection(
                     header = "Recent Transactions",
                     trailingContent = {
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = { openScreen(Screens.TransactionsScreen.route)}) {
                             Text(text = "See All")
                         }
                     },
@@ -404,36 +407,5 @@ fun ContactItem(
         Spacer(modifier = Modifier.height(2.dp))
 
         Text(text = contact.name, fontSize = 12.sp)
-    }
-}
-
-@Composable
-fun TransactionCard(
-    modifier: Modifier = Modifier,
-    transaction: Transaction
-) {
-
-    val color = if (TransactionType.WITHDRAWAL == transaction.type) MaterialTheme.colorScheme.error
-        else Color.Green
-    val sign = if (TransactionType.WITHDRAWAL == transaction.type) "-"
-        else "+"
-
-    Column {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-
-            Text(text = "$sign${transaction.amount}", fontSize = 18.sp, color = color)
-            Spacer(modifier = Modifier.weight(1f))
-            Text(text = transaction.receiver, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-
-        }
-        Divider(
-            thickness = 0.5.dp
-        )
     }
 }

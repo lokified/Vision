@@ -42,6 +42,8 @@ class CompanyViewModel: ViewModel() {
         ),
     )
 
+    val investments = listOf<Investment>()
+
     val newExpenseFormState = FormState(
         fields = listOf(
 

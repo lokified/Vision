@@ -22,6 +22,26 @@ val transactions = listOf(
         amount = "100,000",
         receiver = "My Wallet",
         type = TransactionType.DEPOSIT
+    ),
+    Transaction(
+        amount = "100,000",
+        receiver = "My Wallet",
+        type = TransactionType.WITHDRAWAL
+    ),
+    Transaction(
+        amount = "40,000",
+        receiver = "My Wallet",
+        type = TransactionType.WITHDRAWAL
+    ),
+    Transaction(
+        amount = "100",
+        receiver = "My Wallet",
+        type = TransactionType.WITHDRAWAL
+    ),
+    Transaction(
+        amount = "1258",
+        receiver = "My Wallet",
+        type = TransactionType.DEPOSIT
     )
 )
 
