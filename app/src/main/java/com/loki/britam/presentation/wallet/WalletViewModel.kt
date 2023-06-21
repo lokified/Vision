@@ -9,5 +9,5 @@ class WalletViewModel: ViewModel() {
 
     val balance = mutableStateOf("0.0")
     val contactList = contacts
-    val transactionList = transactions
+    val transactionList = transactions.take(3)
 }

@@ -13,16 +13,18 @@ import com.loki.britam.presentation.company.CompanyViewModel
 import com.loki.britam.presentation.company.NewExpenseScreen
 import com.loki.britam.presentation.home.HomeScreen
 import com.loki.britam.presentation.home.HomeViewModel
-import com.loki.britam.presentation.insurance.ApplyScreen
-import com.loki.britam.presentation.insurance.InsuranceScreen
-import com.loki.britam.presentation.insurance.InsuranceViewModel
+import com.loki.britam.presentation.products.ApplyScreen
+import com.loki.britam.presentation.products.insurance.InsuranceScreen
+import com.loki.britam.presentation.products.insurance.InsuranceViewModel
 import com.loki.britam.presentation.login.LoginScreen
 import com.loki.britam.presentation.login.LoginViewModel
 import com.loki.britam.presentation.new_company.NewCompanyScreen
 import com.loki.britam.presentation.new_company.NewCompanyViewModel
 import com.loki.britam.presentation.onboarding.OnBoardingScreen
+import com.loki.britam.presentation.products.investments.InvestScreen
 import com.loki.britam.presentation.register.RegisterScreen
 import com.loki.britam.presentation.register.RegisterViewModel
+import com.loki.britam.presentation.transactions.TransactionScreen
 import com.loki.britam.presentation.wallet.WalletScreen
 import com.loki.britam.presentation.wallet.WalletViewModel
 import com.loki.britam.util.Constants.TITLE
@@ -84,14 +86,16 @@ fun Navigation(appState: AppState) {
         composable(route = Screens.WalletScreen.route) {
 
             val viewModel = WalletViewModel()
-            WalletScreen(viewModel)
+            WalletScreen(
+                viewModel = viewModel,
+                openScreen = { appState.navigate(it) }
+            )
         }
         
         composable(route = Screens.InsuranceScreen.route) {
 
             InsuranceScreen(
                 openScreen = { appState.navigate(Screens.ApplyScreen.navWithApplyTitle(it)) },
-                popScreen = { appState.popUp() }
             )
         }
 
@@ -141,6 +145,20 @@ fun Navigation(appState: AppState) {
                 popScreen = { appState.popUp() }
             )
         }
+
+        composable(route = Screens.TransactionsScreen.route) {
+
+            TransactionScreen(
+                popScreen = { appState.popUp() }
+            )
+        }
+
+        composable(route = Screens.InvestScreen.route) {
+
+            InvestScreen(
+                openScreen = { appState.navigate(Screens.ApplyScreen.navWithApplyTitle(it)) },
+            )
+        }
     }
 }
 
@@ -157,6 +175,8 @@ sealed class Screens(val route: String) {
     object NewCompanyScreen: Screens("new_company_screen")
     object CompanyScreen: Screens("company_screen")
     object NewExpenseScreen: Screens("new_expense_screen")
+    object TransactionsScreen: Screens("transactions_screen")
+    object InvestScreen: Screens("invest_screen")
 
     fun withApplyTitle(): String {
         return "${ApplyScreen.route}/{$TITLE}"

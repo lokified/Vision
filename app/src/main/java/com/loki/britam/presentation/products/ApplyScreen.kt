@@ -1,6 +1,10 @@
-package com.loki.britam.presentation.insurance
+package com.loki.britam.presentation.products
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.Center
@@ -42,8 +46,9 @@ import androidx.compose.ui.unit.sp
 import com.dsc.form_builder.TextFieldState
 import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.common.DefaultInput
+import com.loki.britam.presentation.products.insurance.InsuranceViewModel
 import com.loki.britam.presentation.theme.BritamTheme
-import com.loki.britam.util.NavigationUtils
+import com.loki.britam.util.ContentUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,12 +58,17 @@ fun ApplyScreen(
     popScreen: () -> Unit
 ) {
 
-    val content = NavigationUtils.applyContentScreen(title)
-    val overview = content.content
-    val isPersonal = content.isPersonal
-    val benefits = content.coverage
+    val content = ContentUtils.applyContentScreen(title)
+    val overview = content.header
+    val url = content.url
+    val benefits = content.benefits
 
     var openBottomSheet by rememberSaveable{ mutableStateOf(false) }
+
+    val openBrowser = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {}
+    )
 
     Scaffold (
         topBar = {
@@ -91,27 +101,29 @@ fun ApplyScreen(
 
                 Text(text = stringResource(id = overview), modifier = Modifier.padding(vertical = 8.dp))
 
-                HeaderSection(header = "Benefits")
+                if (benefits.isNotEmpty()) {
+                    HeaderSection(header = "Benefits")
 
-                benefits.forEachIndexed { index, benefit ->
+                    benefits.forEach { benefit ->
 
-                    Row(
-                        verticalAlignment = CenterVertically,
-                        horizontalArrangement = Center,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    ) {
+                        Row(
+                            verticalAlignment = CenterVertically,
+                            horizontalArrangement = Center,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        ) {
 
-                        Box(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .size(10.dp)
-                                .background(
-                                    shape = RoundedCornerShape(50.dp),
-                                    color = MaterialTheme.colorScheme.secondaryContainer
-                                )
-                        )
+                            Box(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .size(10.dp)
+                                    .background(
+                                        shape = RoundedCornerShape(50.dp),
+                                        color = MaterialTheme.colorScheme.secondaryContainer
+                                    )
+                            )
 
-                        Text(text = benefit, fontSize = 14.sp)
+                            Text(text = benefit, fontSize = 14.sp)
+                        }
                     }
                 }
             }
@@ -129,7 +141,10 @@ fun ApplyScreen(
                 ) {
 
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            openBrowser.launch(intent) },
+
                         shape = RoundedCornerShape(4.dp),
                         modifier = Modifier.fillMaxWidth(.5f)
                     ) {

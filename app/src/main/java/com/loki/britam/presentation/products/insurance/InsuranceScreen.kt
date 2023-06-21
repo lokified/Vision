@@ -1,37 +1,19 @@
-package com.loki.britam.presentation.insurance
+package com.loki.britam.presentation.products.insurance
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.EaseInBounce
-import androidx.compose.animation.core.EaseInCirc
-import androidx.compose.animation.core.EaseOutCirc
-import androidx.compose.animation.core.EaseOutElastic
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -44,7 +26,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -61,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.loki.britam.presentation.common.ProductCard
 import com.loki.britam.presentation.theme.BritamTheme
 
 
@@ -74,7 +56,6 @@ enum class TabPage(val title: String) {
 @Composable
 fun InsuranceScreen(
     openScreen: (String) -> Unit,
-    popScreen: () -> Unit
 ) {
 
     val bInsurances = listOf( "Britam Biashara", "Theft Insurance",  "Fire Insurance", "Cyber Insurance", "Liability Insurance", "Political Violence and Terrorism Insurance")
@@ -83,11 +64,6 @@ fun InsuranceScreen(
     Scaffold (
         topBar = {
             TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = { popScreen() }) {
-                        Icon(imageVector = Icons.Filled.ArrowBackIosNew, contentDescription = null)
-                    }
-                },
                 title = {
                     Text(text = "Insurances")
                 }
@@ -138,51 +114,12 @@ fun Tab(
 
         items(insurances) { insurance ->
 
-            InsuranceCard(
+            ProductCard(
                 title = insurance,
                 modifier = Modifier.padding(8.dp),
                 onClick = openScreen
             )
         }
-    }
-}
-
-@Composable
-fun InsuranceCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    color: Color = MaterialTheme.colorScheme.primary,
-    onClick: (String) -> Unit
-) {
-
-    val width = LocalView.current.width.dp
-
-    Box(
-        modifier = modifier
-            .background(
-                color = color.copy(0.25f),
-                shape = RoundedCornerShape(8.dp)
-            )
-            .border(
-                width = .5.dp,
-                color = color,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .size(
-                height = 150.dp,
-                width = width / 2
-            )
-            .padding(16.dp)
-            .clickable { onClick(title) },
-        contentAlignment = Alignment.Center
-    ) {
-
-        Text(
-            text = title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Center
-        )
     }
 }
 
@@ -245,8 +182,6 @@ fun InsuranceTabs(
 @Composable
 fun InsuranceScreenPreview() {
     BritamTheme {
-        InsuranceScreen(openScreen = {}) {
-
-        }
+        InsuranceScreen(openScreen = {})
     }
 }
