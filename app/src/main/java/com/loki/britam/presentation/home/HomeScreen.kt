@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Business
+import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -41,13 +43,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loki.britam.data.Company
 import com.loki.britam.data.companies
+import com.loki.britam.presentation.common.BoxItem
 import com.loki.britam.presentation.common.HeaderSection
+import com.loki.britam.presentation.common.IconBoxItem
 import com.loki.britam.presentation.navigation.Screens
 import com.loki.britam.presentation.theme.BritamTheme
 
@@ -125,6 +128,20 @@ fun HomeScreen(
             )
         }
 
+        item {
+            HeaderSection(
+                header = "Do you need a loan for your business ?",
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp),
+            )
+        }
+
+        item {
+            LoanSection(
+                products = listOf("Anzisha Loan", "Britam Loan"),
+                onClick = { openScreen(Screens.ApplyScreen.navWithApplyTitle(it)) }
+            )
+        }
+
 
         item {
             HeaderSection(
@@ -197,22 +214,38 @@ fun NewCompanySection(
                     .size(70.dp)
                     .padding(horizontal = 8.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.inverseOnSurface,
+                        color = MaterialTheme.colorScheme.primary.copy(.1f),
                         shape = RoundedCornerShape(4.dp)
                     )
                     .clickable { onAddCompanyClick() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+
+                    Text(
+                        text = "Create", color = MaterialTheme.colorScheme.primary,
+                        fontSize = 12.sp
+                    )
+                }
             }
         }
 
         items(companies) { name ->
-            BoxItem(name = name, onClick = onCompanyClick)
+            IconBoxItem(
+                name = name,
+                icon = Icons.Filled.Business,
+                onClick = onCompanyClick
+            )
         }
     }
 }
@@ -236,28 +269,20 @@ fun ProductSection(
 }
 
 @Composable
-fun BoxItem(
+fun LoanSection(
     modifier: Modifier = Modifier,
-    name: String,
+    products: List<String>,
     onClick: (String) -> Unit
 ) {
 
-    Box(
+    LazyRow(
+        contentPadding = PaddingValues(8.dp),
         modifier = modifier
-            .size(height = 70.dp, width = 150.dp)
-            .padding(horizontal = 8.dp)
-            .background(
-                color = MaterialTheme.colorScheme.inverseOnSurface,
-                shape = RoundedCornerShape(4.dp)
-            ).clickable { onClick(name) },
-        contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = name,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Center
-        )
+
+        items(products) { name ->
+            IconBoxItem(name = name, icon = Icons.Filled.Money ,onClick = onClick)
+        }
     }
 }
 
@@ -271,7 +296,7 @@ fun CompanyCard(
         Card(
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.inverseOnSurface
+                containerColor = MaterialTheme.colorScheme.primary.copy(.05f)
             )
         ) {
             Text(

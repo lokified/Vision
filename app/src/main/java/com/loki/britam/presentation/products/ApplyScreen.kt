@@ -1,6 +1,7 @@
 package com.loki.britam.presentation.products
 
 import android.content.Intent
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -146,7 +148,10 @@ fun ApplyScreen(
                             openBrowser.launch(intent) },
 
                         shape = RoundedCornerShape(4.dp),
-                        modifier = Modifier.fillMaxWidth(.5f)
+                        modifier = Modifier.fillMaxWidth(.5f),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        )
                     ) {
                         Icon(
                             imageVector = Icons.Filled.OpenInNew,
@@ -262,7 +267,7 @@ fun BottomSheet(
 
 @Preview(
     showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES
+    uiMode = UI_MODE_NIGHT_NO
 )
 @Composable
 fun ApplyScreenPreview() {

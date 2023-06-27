@@ -67,4 +67,18 @@ class CompanyViewModel: ViewModel() {
             ),
         )
     )
+
+
+    val loans = listOf(
+        Loan(
+            name = "Anzisha Loan",
+            isActive = true,
+            dueDate = "08/12/2024"
+        ),
+        Loan(
+            name = "Britam Loan",
+            isActive = true,
+            dueDate = "01/5/2024"
+        ),
+    )
 }

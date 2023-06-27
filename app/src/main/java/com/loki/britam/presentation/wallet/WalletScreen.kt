@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.CallMissed
 import androidx.compose.material.icons.filled.RemoveFromQueue
 import androidx.compose.material.icons.filled.RequestQuote
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loki.britam.data.Contact
@@ -59,6 +61,7 @@ import com.loki.britam.data.TransactionType
 import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.common.TransactionCard
 import com.loki.britam.presentation.navigation.Screens
+import com.loki.britam.presentation.theme.BritamTheme
 
 @Composable
 fun WalletScreen(
@@ -104,21 +107,6 @@ fun WalletScreen(
                     },
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
-            }
-
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 2.dp, horizontal = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-
-                    Text(text = "Amount", fontSize = 12.sp)
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "Recipient", fontSize = 12.sp)
-                }
             }
 
             items(viewModel.transactionList) { transaction ->
@@ -277,7 +265,14 @@ fun WalletActions(
                 horizontal = 16.dp
             )
         ) {
-            
+            ActionItem(
+                title = "Deposit",
+                icon = Icons.Filled.ArrowUpward,
+                onClick = onClick
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
             ActionItem(
                 title = "Request",
                 icon = Icons.Filled.CallMissed,
@@ -311,11 +306,10 @@ fun ActionItem(
     onClick: () -> Unit
 ) {
 
-    IconButton(
-        onClick = onClick,
+    Box(
         modifier = modifier
             .padding(horizontal = 12.dp)
-            .size(45.dp)
+            .clickable { onClick() }
     ) {
 
         Column(
@@ -352,7 +346,7 @@ fun SendSection(
                     .size(height = 50.dp, width = 70.dp)
                     .padding(horizontal = 8.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        color = MaterialTheme.colorScheme.primary.copy(.1f),
                         shape = RoundedCornerShape(4.dp)
                     )
                     .clickable { onAddContactClick() },
@@ -361,7 +355,8 @@ fun SendSection(
                 Icon(
                     imageVector = Icons.Filled.Add,
                     contentDescription = null,
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(40.dp),
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -407,5 +402,15 @@ fun ContactItem(
         Spacer(modifier = Modifier.height(2.dp))
 
         Text(text = contact.name, fontSize = 12.sp)
+    }
+}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+fun WalletPreview() {
+    BritamTheme {
+        WalletScreen(viewModel = WalletViewModel(), openScreen = {})
     }
 }
