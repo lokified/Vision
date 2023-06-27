@@ -1,11 +1,13 @@
 package com.loki.britam.presentation.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -52,7 +54,12 @@ fun DropDownInput(
         modifier = modifier
     ) {
 
-        Box {
+        Box (
+            modifier = Modifier.background(
+                    color = MaterialTheme.colorScheme.primary.copy(.05f),
+                    shape = RoundedCornerShape(8.dp)
+                )
+        ) {
             TextField(
                 value = selectedValue,
                 onValueChange = {
@@ -68,10 +75,11 @@ fun DropDownInput(
                         textFieldSize = it.size.toSize()
                     },
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    containerColor = MaterialTheme.colorScheme.primary.copy(.05f),
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
+                shape = RoundedCornerShape(8.dp),
                 keyboardOptions = KeyboardOptions.Default,
                 trailingIcon = {
                     IconButton(onClick = { isExpanded = !isExpanded }) {
