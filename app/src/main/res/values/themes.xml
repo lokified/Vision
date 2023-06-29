@@ -2,4 +2,13 @@
 <resources>
 
     <style name="Theme.Britam" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Britam.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Booko.AppBarOverlay" parent="Theme.Britam.NoActionBar" />
+
+    <style name="Theme.Booko.PopupOverlay" parent="Theme.Britam.NoActionBar" />
 </resources>
