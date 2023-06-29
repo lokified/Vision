@@ -5,11 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.dsc.form_builder.FormState
 import com.dsc.form_builder.TextFieldState
 import com.dsc.form_builder.Validators
+import com.loki.britam.data.local.datastore.DataStoreStorage
 import com.loki.britam.presentation.navigation.Screens
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel: ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val datastore: DataStoreStorage
+): ViewModel() {
 
     val loginFormState = FormState(
         fields = listOf(
@@ -30,6 +36,6 @@ class LoginViewModel: ViewModel() {
 
     fun login(email: String, password: String, openAndPopUp: (String, String) -> Unit) {
 
-        openAndPopUp(Screens.HomeScreen.route, Screens.LoginScreen.route)
+        openAndPopUp(Screens.HomeScreen.route, Screens.OnBoardingScreen.route)
     }
 }

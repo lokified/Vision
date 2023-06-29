@@ -40,13 +40,13 @@ import androidx.compose.ui.unit.toSize
 fun DropDownInput(
     modifier: Modifier = Modifier,
     placeholder: String,
+    selectedValue: String,
     onValueChange: (String) -> Unit,
     options: List<String>,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var isExpanded by remember { mutableStateOf(false) }
-    var selectedValue by remember { mutableStateOf("") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     val icon = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown
 
@@ -63,7 +63,6 @@ fun DropDownInput(
             TextField(
                 value = selectedValue,
                 onValueChange = {
-                    selectedValue = it
                     onValueChange(it)
                 },
                 placeholder = {
@@ -111,7 +110,7 @@ fun DropDownInput(
                 DropdownMenuItem(
                     onClick = {
                         keyboardController?.hide()
-                        selectedValue = it
+                        onValueChange(it)
                         isExpanded = false
                     },
                     text = {

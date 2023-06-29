@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,16 +30,21 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.loki.britam.data.Company
 import com.loki.britam.presentation.common.DropDownInput
 import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.theme.BritamTheme
+import com.loki.britam.util.MonthUtils
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -47,15 +56,23 @@ import com.patrykandpatrick.vico.compose.legend.verticalLegend
 import com.patrykandpatrick.vico.compose.legend.verticalLegendItem
 import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entriesOf
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 
-private val model = entryModelOf(entriesOf(0, 2, 2, 3, 1), entriesOf(0, 3, 1, 2, 3))
 private val chartColors = listOf(Color.Blue, Color.Red)
 @Composable
 fun BizScreen(
     viewModel: BizViewModel
 ) {
+
+    val companies = viewModel.otherCompanyList.map { it.name }
+    var selectedBusiness by rememberSaveable { mutableStateOf("Other Business") }
+    var selectedMonth by rememberSaveable { mutableStateOf("May") }
+
+    var isExpanded by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -72,12 +89,24 @@ fun BizScreen(
         ) {
 
             item {
-                GraphSection()
+                GraphSection(
+                    model = entryModelOf(
+                        viewModel.comparableModel.value,
+                        viewModel.myCompany.data[0].model
+                    ),
+                    otherLabel = selectedBusiness
+                )
             }
 
             item {
                 CompanySelectionSection(
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    selected = selectedBusiness,
+                    selectedCompany = {
+                        selectedBusiness = it
+                        viewModel.setSelectedModel(it)
+                    },
+                    companyList = companies
                 )
             }
 
@@ -99,9 +128,9 @@ fun BizScreen(
                                 horizontalArrangement = Arrangement.Center
                             ) {
 
-                                Text(text = "May", fontSize = 12.sp)
+                                Text(text = selectedMonth, fontSize = 12.sp)
 
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = { isExpanded = true }) {
                                     Icon(
                                         imageVector = Icons.Filled.CalendarMonth,
                                         contentDescription = null,
@@ -111,6 +140,36 @@ fun BizScreen(
                             }
                         }
 
+                        val months = MonthUtils.months
+
+                        DropdownMenu(
+                            expanded = isExpanded,
+                            onDismissRequest = { isExpanded = false },
+                            modifier = Modifier.height(300.dp),
+                            scrollState = rememberScrollState(),
+                            offset = DpOffset(-40.dp, -40.dp)
+                        ) {
+                            months.forEach {
+
+                                DropdownMenuItem(
+                                    onClick = {
+                                        isExpanded = false
+                                        selectedMonth = it
+                                    },
+                                    text = {
+                                        Text(
+                                            text = it,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(
+                                                    horizontal = 16.dp,
+                                                    vertical = 12.dp
+                                                ),
+                                        )
+                                    }
+                                )
+                            }
+                        }
                     },
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
@@ -173,7 +232,9 @@ fun TopSection(
 
 @Composable
 fun GraphSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    otherLabel: String,
+    model: ChartEntryModel
 ) {
 
     Box(modifier = modifier.fillMaxWidth()) {
@@ -192,14 +253,14 @@ fun GraphSection(
             model = model,
             startAxis = startAxis(),
             bottomAxis = bottomAxis(),
-            legend = rememberLegend(),
+            legend = rememberLegend(otherLabel),
             modifier = Modifier.height(300.dp)
         )
     }
 }
 
 @Composable
-fun rememberLegend() = verticalLegend(
+fun rememberLegend(otherLabel: String) = verticalLegend(
     items = chartColors.mapIndexed { index, color ->
         verticalLegendItem(
             icon = shapeComponent(Shapes.pillShape, color),
@@ -207,7 +268,7 @@ fun rememberLegend() = verticalLegend(
                 color = currentChartStyle.axis.axisLabelColor,
                 textSize = 12.sp,
             ),
-            labelText = if (index == 0) "Other Company" else "My Company"
+            labelText = if (index == 0) otherLabel else "My Business"
         )
     },
     iconSize = 8.dp,
@@ -218,7 +279,10 @@ fun rememberLegend() = verticalLegend(
 
 @Composable
 fun CompanySelectionSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selected: String,
+    selectedCompany: (String) -> Unit,
+    companyList: List<String>
 ) {
 
     Column(modifier = modifier.fillMaxWidth()) {
@@ -227,8 +291,9 @@ fun CompanySelectionSection(
         Spacer(modifier = Modifier.height(4.dp))
         DropDownInput(
             placeholder = "Select Company",
-            onValueChange = { },
-            options = listOf("Safaricom", "Airtel", "pics")
+            selectedValue = selected,
+            onValueChange = selectedCompany,
+            options = companyList
         )
     }
 }

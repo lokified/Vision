@@ -1,7 +1,6 @@
 package com.loki.britam.presentation.onboarding
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,10 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Grain
-import androidx.compose.material.icons.filled.Money
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,17 +20,25 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.loki.britam.R
 import com.loki.britam.presentation.navigation.Screens
-import com.loki.britam.presentation.theme.BritamTheme
 
 @Composable
 fun OnBoardingScreen(
+    viewModel: OnBoardingViewModel,
+    openAndPop: (String, String) -> Unit,
     openScreen: (String) -> Unit
 ) {
+
+    LaunchedEffect(key1 = viewModel.isLoggedIn.value ) {
+        if (viewModel.isLoggedIn.value) {
+            openAndPop(
+                Screens.HomeScreen.route, Screens.OnBoardingScreen.route
+            )
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize())   {
 
@@ -44,8 +51,8 @@ fun OnBoardingScreen(
 
         TopSection(
             modifier = Modifier
-            .padding(16.dp)
-            .align(Alignment.TopCenter),
+                .padding(16.dp)
+                .align(Alignment.TopCenter),
             onClick = { openScreen(Screens.LoginScreen.route) }
         )
 
@@ -69,15 +76,18 @@ fun TopSection(
         Image(
             imageVector = Icons.Filled.Grain,
             contentDescription = null,
-            modifier = Modifier.align(
-                Alignment.Center
-            ).size(50.dp),
+            modifier = Modifier
+                .align(
+                    Alignment.Center
+                )
+                .size(50.dp),
             colorFilter = ColorFilter.tint(color = Color.White)
         )
 
         Text(
             text = "Login",
-            modifier = Modifier.align(Alignment.TopEnd)
+            modifier = Modifier
+                .align(Alignment.TopEnd)
                 .padding(4.dp)
                 .clickable { onClick() },
             color = Color.White,
