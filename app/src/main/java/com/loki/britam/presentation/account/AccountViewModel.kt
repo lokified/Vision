@@ -18,22 +18,6 @@ class AccountViewModel @Inject constructor(
     private val firebase: FirebaseAccountRepository
 ): VisionViewModel(datastore) {
 
-    val name = mutableStateOf("")
-    val email = mutableStateOf("")
-
-    init {
-        getUser()
-    }
-
-    private fun getUser() {
-        viewModelScope.launch {
-            datastore.getUser().collect { user ->
-                name.value = user.name
-                email.value = user.email
-            }
-        }
-    }
-
     fun logOut(openAndStart: (String) -> Unit) {
         launchCatching {
             firebase.signOut()
