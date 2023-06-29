@@ -13,6 +13,8 @@ import com.loki.britam.core.Constants.TITLE
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.loki.britam.presentation.AppState
+import com.loki.britam.presentation.account.AccountScreen
+import com.loki.britam.presentation.account.AccountViewModel
 import com.loki.britam.presentation.biz.BizScreen
 import com.loki.britam.presentation.biz.BizViewModel
 import com.loki.britam.presentation.company.CompanyScreen
@@ -75,7 +77,7 @@ fun Navigation(appState: AppState) {
 
         composable(route = Screens.RegisterScreen.route) {
 
-            val viewModel = RegisterViewModel()
+            val viewModel = hiltViewModel<RegisterViewModel>()
 
             RegisterScreen(
                 viewModel = viewModel,
@@ -288,6 +290,15 @@ fun Navigation(appState: AppState) {
                 openScreen = { appState.navigate(Screens.ApplyScreen.navWithApplyTitle(it)) },
             )
         }
+
+        composable(route = Screens.AccountScreen.route) {
+            
+            val viewModel = hiltViewModel<AccountViewModel>()
+            
+            AccountScreen(
+                viewModel = viewModel,
+                openAndStart = { appState.clearAndNavigate(it) })
+        }
     }
 }
 
@@ -306,6 +317,7 @@ sealed class Screens(val route: String) {
     object NewExpenseScreen: Screens("new_expense_screen")
     object TransactionsScreen: Screens("transactions_screen")
     object InvestScreen: Screens("invest_screen")
+    object AccountScreen: Screens("account_screen")
 
     fun withApplyTitle(): String {
         return "${ApplyScreen.route}/{$TITLE}"

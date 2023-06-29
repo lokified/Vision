@@ -1,5 +1,6 @@
 package com.loki.britam.presentation.register
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,13 +20,16 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Grain
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +47,13 @@ fun RegisterScreen(
     viewModel: RegisterViewModel,
     openScreen: (String) -> Unit
 ) {
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        if (viewModel.errorMessage.value.isNotBlank()) {
+            Toast.makeText(context, viewModel.errorMessage.value, Toast.LENGTH_LONG).show()
+        }
+    }
 
     val formState = remember { viewModel.registerFormState }
     val names = formState.getState<TextFieldState>("Name")
@@ -64,7 +75,8 @@ fun RegisterScreen(
             Image(
                 imageVector = Icons.Filled.Grain,
                 contentDescription = null,
-                modifier = Modifier.size(70.dp)
+                modifier = Modifier
+                    .size(70.dp)
                     .padding(top = 16.dp)
             )
             Text(text = "Vision")
@@ -148,7 +160,8 @@ fun RegisterScreen(
             Button(
                 onClick = {
                     if (formState.validate()) {
-                        viewModel.signIn(
+                        viewModel.register(
+                            names.value,
                             email.value,
                             password.value,
                             openScreen
@@ -171,16 +184,18 @@ fun RegisterScreen(
                     .padding(vertical = 4.dp)
                     .clickable { openScreen(Screens.LoginScreen.route) }
             )
-        }
-    }
-}
 
-@Preview(
-    showBackground = true
-)
-@Composable
-fun RegisterPreview() {
-    BritamTheme {
-        RegisterScreen(viewModel = RegisterViewModel(), openScreen = {})
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (viewModel.isLoading.value) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    CircularProgressIndicator()
+                }
+            }
+        }
     }
 }
