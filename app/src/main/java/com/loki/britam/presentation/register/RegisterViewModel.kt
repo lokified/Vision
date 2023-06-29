@@ -1,15 +1,22 @@
 package com.loki.britam.presentation.register
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.mutableStateOf
 import com.dsc.form_builder.FormState
 import com.dsc.form_builder.TextFieldState
 import com.dsc.form_builder.Validators
+import com.google.firebase.FirebaseException
+import com.loki.britam.data.local.datastore.DataStoreStorage
+import com.loki.britam.data.remote.firebase.FirebaseAccountRepository
+import com.loki.britam.presentation.VisionViewModel
 import com.loki.britam.presentation.navigation.Screens
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterViewModel: ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor (
+    private val datastore: DataStoreStorage,
+    private val firebase: FirebaseAccountRepository
+    ): VisionViewModel(datastore) {
 
     val registerFormState = FormState(
         fields = listOf(
@@ -40,12 +47,23 @@ class RegisterViewModel: ViewModel() {
         )
     )
 
-    fun signIn(email: String, password: String, openScreen: (String) -> Unit) {
+    var errorMessage = mutableStateOf("")
+    var isLoading = mutableStateOf(false)
 
-        viewModelScope.launch {
+    fun register(name: String, email: String, password: String, openScreen: (String) -> Unit) {
 
-            delay(3000L)
-            openScreen(Screens.LoginScreen.route)
+        launchCatching {
+
+            try {
+
+                isLoading.value = true
+                firebase.createAccount(name, email, password)
+                isLoading.value = false
+                openScreen(Screens.LoginScreen.route)
+            } catch (e: FirebaseException) {
+                isLoading.value = false
+                errorMessage.value = e.message ?: "Something went wrong"
+            }
         }
     }
 }

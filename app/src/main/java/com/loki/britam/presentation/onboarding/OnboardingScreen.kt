@@ -32,12 +32,11 @@ fun OnBoardingScreen(
     openScreen: (String) -> Unit
 ) {
 
-    LaunchedEffect(key1 = viewModel.isLoggedIn.value ) {
-        if (viewModel.isLoggedIn.value) {
-            openAndPop(
-                Screens.HomeScreen.route, Screens.OnBoardingScreen.route
-            )
-        }
+    viewModel.onAppStart(openAndPop)
+
+    LaunchedEffect(key1 = true ) {
+        //viewModel.getIsLoggedIn(openAndPop)
+
     }
 
     Box(modifier = Modifier.fillMaxSize())   {

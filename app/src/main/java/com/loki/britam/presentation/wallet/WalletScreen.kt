@@ -80,7 +80,11 @@ fun WalletScreen(
     var actionType by remember { mutableStateOf<ActionType?>(null) }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TopSection(modifier = Modifier.padding(16.dp))
+
+        TopSection(
+            modifier = Modifier.padding(16.dp),
+            openScreen = openScreen
+        )
         
         LazyColumn(
             contentPadding = PaddingValues(16.dp)
@@ -145,7 +149,8 @@ fun WalletScreen(
 
 @Composable
 fun TopSection(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    openScreen: (String) -> Unit
 ) {
     
     Box(modifier = modifier.fillMaxWidth()) {
@@ -177,6 +182,7 @@ fun TopSection(
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(40.dp)
+                    .clickable { openScreen(Screens.AccountScreen.route) }
             ) {
                 
                 Icon(

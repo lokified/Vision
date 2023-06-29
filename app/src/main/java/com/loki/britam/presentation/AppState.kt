@@ -38,4 +38,11 @@ class AppState(
             }
         }
     }
+
+    fun clearAndNavigate(route: String) {
+        navController.navigate(route) {
+            launchSingleTop = true
+            popUpTo(0) { inclusive = true }
+        }
+    }
 }

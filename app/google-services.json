@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "479749157392",
+    "project_id": "britam-37306",
+    "storage_bucket": "britam-37306.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479749157392:android:3b02ff82556165898e1095",
+        "android_client_info": {
+          "package_name": "com.loki.britam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479749157392-qkte7n7i8achtfsfh91kttlqdctm3u31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9LdMHk4eIlgfRNbiqISa09QgX40M0N88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479749157392-qkte7n7i8achtfsfh91kttlqdctm3u31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
