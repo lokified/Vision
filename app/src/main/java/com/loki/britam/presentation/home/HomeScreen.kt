@@ -292,6 +292,8 @@ fun CompanyCard(
     company: Company
 ) {
 
+    val data = company.data[0]
+
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
             shape = RoundedCornerShape(4.dp),
@@ -314,22 +316,22 @@ fun CompanyCard(
                 
                 Column(verticalArrangement = Arrangement.Center) {
 
-                    CompanyItem(title = "Revenue", value = company.revenue)
+                    CompanyItem(title = "Revenue", value = data.revenue)
                     
                     Spacer(modifier = Modifier.height(12.dp))
                     
-                    CompanyItem(title = "Profits", value = company.profits)
+                    CompanyItem(title = "Profits", value = data.profits)
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 Column(verticalArrangement = Arrangement.Center) {
 
-                    CompanyItem(title = "Customers", value = company.customers)
+                    CompanyItem(title = "Customers", value = data.customers)
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    CompanyItem(title = "Expenditure", value = company.expenditure)
+                    CompanyItem(title = "Expenditure", value = data.expenditure)
                 }
             }
         }

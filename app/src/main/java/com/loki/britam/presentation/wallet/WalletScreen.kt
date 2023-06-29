@@ -1,5 +1,6 @@
 package com.loki.britam.presentation.wallet
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,24 +26,24 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.CallMissed
-import androidx.compose.material.icons.filled.RemoveFromQueue
-import androidx.compose.material.icons.filled.RequestQuote
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.TransitEnterexit
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,19 +56,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.loki.britam.R
 import com.loki.britam.data.Contact
-import com.loki.britam.data.Transaction
-import com.loki.britam.data.TransactionType
 import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.common.TransactionCard
 import com.loki.britam.presentation.navigation.Screens
 import com.loki.britam.presentation.theme.BritamTheme
+
+enum class ActionType {
+    DEPOSIT,
+    REQUEST,
+    WITHDRAW,
+    SEND
+}
 
 @Composable
 fun WalletScreen(
     viewModel: WalletViewModel,
     openScreen: (String) -> Unit
 ) {
+
+    var openSheet by rememberSaveable{ mutableStateOf(false) }
+    var actionType by remember { mutableStateOf<ActionType?>(null) }
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopSection(modifier = Modifier.padding(16.dp))
@@ -78,7 +88,11 @@ fun WalletScreen(
             
             item { 
                 WalletCard(
-                    balance = viewModel.balance.value
+                    balance = viewModel.balance.value,
+                    onClickActions = { actions ->
+                        openSheet = true
+                        actionType = actions
+                    }
                 )
             }
             
@@ -117,7 +131,16 @@ fun WalletScreen(
             }
         }
     }
-    
+
+    if (openSheet) {
+        ActionBottomSheet(
+            actionType = actionType!!,
+            onClick = { /*TODO*/ },
+            onDismiss = {
+                openSheet = false
+            }
+        )
+    }
 }
 
 @Composable
@@ -156,10 +179,10 @@ fun TopSection(
                     .size(40.dp)
             ) {
                 
-                Image(
+                Icon(
                     imageVector = Icons.Filled.AccountCircle,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
         }
@@ -169,9 +192,10 @@ fun TopSection(
 @Composable
 fun WalletCard(
     modifier: Modifier = Modifier,
-    balance: String
+    balance: String,
+    onClickActions: (ActionType) -> Unit
 ) {
-    
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -193,7 +217,7 @@ fun WalletCard(
 
             WalletActions(
                 modifier = Modifier.align(Alignment.BottomCenter),
-                onClick = {}
+                onClick = onClickActions
             )
         } 
     }
@@ -247,7 +271,7 @@ fun WalletInfo(
 @Composable
 fun WalletActions(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: (ActionType) -> Unit
 ) {
     
     Box(
@@ -268,7 +292,7 @@ fun WalletActions(
             ActionItem(
                 title = "Deposit",
                 icon = Icons.Filled.ArrowUpward,
-                onClick = onClick
+                onClick = { onClick(ActionType.DEPOSIT) }
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -276,7 +300,7 @@ fun WalletActions(
             ActionItem(
                 title = "Request",
                 icon = Icons.Filled.CallMissed,
-                onClick = onClick
+                onClick = { onClick(ActionType.REQUEST) }
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -284,7 +308,7 @@ fun WalletActions(
             ActionItem(
                 title = "Withdraw",
                 icon = Icons.Filled.TransitEnterexit,
-                onClick = onClick
+                onClick = { onClick(ActionType.WITHDRAW) }
             )
             
             Spacer(modifier = Modifier.weight(1f))
@@ -292,7 +316,7 @@ fun WalletActions(
             ActionItem(
                 title = "Send",
                 icon = Icons.Filled.Send,
-                onClick = onClick
+                onClick = { onClick(ActionType.SEND) }
             )
         }
     }
@@ -326,6 +350,121 @@ fun ActionItem(
 
             Text(text = title, fontSize = 12.sp)
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ActionBottomSheet(
+    actionType: ActionType,
+    onClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = {
+            onDismiss()
+        },
+        shape = RoundedCornerShape(
+            topStart = 8.dp,
+            topEnd = 8.dp
+        )
+    ) {
+
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+
+            Text(
+                text = setActionTypeTitle(actionType),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (actionType == ActionType.WITHDRAW || actionType == ActionType.DEPOSIT) {
+
+                RowItem(
+                    image = R.drawable.mpesa,
+                    content = "Mpesa",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    onClick = onClick
+                )
+                RowItem(
+                    image = R.drawable.bank,
+                    content = "My Bank Account",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    onClick = onClick
+                )
+            }
+
+            if (actionType == ActionType.SEND) {
+
+                RowItem(
+                    image = R.drawable.contacts,
+                    content = "My Contacts",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    onClick = onClick
+                )
+            }
+
+            if (actionType == ActionType.REQUEST) {
+
+                RowItem(
+                    image = R.drawable.contacts,
+                    content = "My Contacts",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    onClick = onClick
+                )
+            }
+
+            Spacer(modifier = Modifier.height(25.dp))
+        }
+    }
+}
+
+fun setActionTypeTitle(actionType: ActionType): String {
+    return when(actionType) {
+        ActionType.DEPOSIT -> "Deposit From"
+        ActionType.REQUEST -> "Request From"
+        ActionType.WITHDRAW -> "Withdraw To"
+        ActionType.SEND -> "Send To"
+    }
+}
+
+@Composable
+fun RowItem(
+    modifier: Modifier = Modifier,
+    @DrawableRes
+    image: Int,
+    content: String,
+    onClick: () -> Unit
+) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary.copy(.05f),
+                    shape = RoundedCornerShape(8.dp)
+                )
+        ) {
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = content, fontSize = 15.sp)
     }
 }
 

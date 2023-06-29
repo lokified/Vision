@@ -69,7 +69,6 @@ fun LoginScreen(
                 contentDescription = null,
                 modifier = Modifier.size(70.dp)
                     .padding(top = 16.dp),
-                colorFilter = ColorFilter.tint(color = Color.Black)
             )
             Text(text = "Vision")
         }
@@ -167,17 +166,5 @@ fun LoginScreen(
                 Text(text = "Register")
             }
         }
-    }
-
-    
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-fun LoginScreenPreview() {
-    BritamTheme {
-        LoginScreen(openScreen = {}, openAndPopScreen = {_, _ ->}, viewModel = LoginViewModel())
     }
 }

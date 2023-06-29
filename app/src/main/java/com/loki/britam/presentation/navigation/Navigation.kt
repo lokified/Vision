@@ -1,10 +1,17 @@
 package com.loki.britam.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.loki.britam.core.Constants.TITLE
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.loki.britam.presentation.AppState
 import com.loki.britam.presentation.biz.BizScreen
 import com.loki.britam.presentation.biz.BizViewModel
@@ -21,29 +28,39 @@ import com.loki.britam.presentation.login.LoginViewModel
 import com.loki.britam.presentation.new_company.NewCompanyScreen
 import com.loki.britam.presentation.new_company.NewCompanyViewModel
 import com.loki.britam.presentation.onboarding.OnBoardingScreen
+import com.loki.britam.presentation.onboarding.OnBoardingViewModel
 import com.loki.britam.presentation.products.investments.InvestScreen
 import com.loki.britam.presentation.register.RegisterScreen
 import com.loki.britam.presentation.register.RegisterViewModel
 import com.loki.britam.presentation.transactions.TransactionScreen
 import com.loki.britam.presentation.wallet.WalletScreen
 import com.loki.britam.presentation.wallet.WalletViewModel
-import com.loki.britam.util.Constants.TITLE
 
+@ExperimentalAnimationApi
 @Composable
 fun Navigation(appState: AppState) {
 
-    NavHost(
+    AnimatedNavHost(
         navController = appState.navController,
         startDestination = Screens.OnBoardingScreen.route
     ) {
 
         composable(route = Screens.OnBoardingScreen.route) {
-            OnBoardingScreen(openScreen = { appState.navigate(it) })
+
+            val viewModel = hiltViewModel<OnBoardingViewModel>()
+
+            OnBoardingScreen(
+                viewModel = viewModel,
+                openAndPop = { route, pop ->
+                        appState.navigateAndPopUp(route, pop)
+                },
+                openScreen = { appState.navigate(it) }
+            )
         }
 
         composable(route = Screens.LoginScreen.route) {
 
-            val viewModel = LoginViewModel()
+            val viewModel = hiltViewModel<LoginViewModel>()
 
             LoginScreen(
                 viewModel = viewModel,
@@ -66,7 +83,43 @@ fun Navigation(appState: AppState) {
             )
         }
 
-        composable(route = Screens.HomeScreen.route) {
+        composable(
+            route = Screens.HomeScreen.route,
+            enterTransition = {
+                when(initialState.destination.route) {
+                    Screens.InsuranceScreen.route -> {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(800)
+                        )
+                    }
+                    Screens.InvestScreen.route -> {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(800)
+                        )
+                    }
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when(targetState.destination.route) {
+                    Screens.InsuranceScreen.route -> {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(800)
+                        )
+                    }
+                    Screens.InvestScreen.route -> {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(800)
+                        )
+                    }
+                    else -> null
+                }
+            }
+        ) {
 
             val viewModel = HomeViewModel()
             HomeScreen(
@@ -75,7 +128,11 @@ fun Navigation(appState: AppState) {
             )
         }
 
-        composable(route = Screens.BizScreen.route) {
+        composable(
+            route = Screens.BizScreen.route,
+            enterTransition = null,
+            exitTransition = null
+        ) {
 
             val viewModel = BizViewModel()
             BizScreen(
@@ -83,7 +140,31 @@ fun Navigation(appState: AppState) {
             )
         }
 
-        composable(route = Screens.WalletScreen.route) {
+        composable(
+            route = Screens.WalletScreen.route,
+            enterTransition = {
+                when(initialState.destination.route) {
+                    Screens.TransactionsScreen.route -> {
+                        slideIntoContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(800)
+                        )
+                    }
+                    else -> null
+                }
+            },
+            exitTransition = {
+                when(targetState.destination.route) {
+                    Screens.TransactionsScreen.route -> {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(800)
+                        )
+                    }
+                    else -> null
+                }
+            }
+        ) {
 
             val viewModel = WalletViewModel()
             WalletScreen(
@@ -92,7 +173,23 @@ fun Navigation(appState: AppState) {
             )
         }
         
-        composable(route = Screens.InsuranceScreen.route) {
+        composable(
+            route = Screens.InsuranceScreen.route,
+            enterTransition = {
+                if (initialState.destination.route == Screens.HomeScreen.route)
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(800)
+                    ) else null
+            },
+            exitTransition = {
+                if (targetState.destination.route == Screens.HomeScreen.route)
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(800)
+                    ) else null
+            }
+        ) {
 
             InsuranceScreen(
                 openScreen = { appState.navigate(Screens.ApplyScreen.navWithApplyTitle(it)) },
@@ -146,14 +243,46 @@ fun Navigation(appState: AppState) {
             )
         }
 
-        composable(route = Screens.TransactionsScreen.route) {
+        composable(
+            route = Screens.TransactionsScreen.route,
+            enterTransition = {
+                if (initialState.destination.route == Screens.WalletScreen.route)
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(800)
+                    ) else null
+            },
+            exitTransition = {
+                if (targetState.destination.route == Screens.WalletScreen.route)
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(800)
+                    ) else null
+            }
+        ) {
 
             TransactionScreen(
                 popScreen = { appState.popUp() }
             )
         }
 
-        composable(route = Screens.InvestScreen.route) {
+        composable(
+            route = Screens.InvestScreen.route,
+            enterTransition = {
+                if (initialState.destination.route == Screens.HomeScreen.route)
+                    slideIntoContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(800)
+                    ) else null
+            },
+            exitTransition = {
+                if (targetState.destination.route == Screens.HomeScreen.route)
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Right,
+                        animationSpec = tween(800)
+                    ) else null
+            }
+        ) {
 
             InvestScreen(
                 openScreen = { appState.navigate(Screens.ApplyScreen.navWithApplyTitle(it)) },

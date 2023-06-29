@@ -88,6 +88,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("androidx.navigation:navigation-compose:2.6.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.navigation:navigation-compose:2.6.0")
 
     //Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.45")
@@ -111,4 +112,7 @@ dependencies {
     implementation("com.patrykandpatrick.vico:core:1.6.5")
     implementation("com.patrykandpatrick.vico:compose:1.6.5")
     implementation("com.patrykandpatrick.vico:compose-m3:1.6.5")
+
+    //animation
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.31.4-beta")
 }

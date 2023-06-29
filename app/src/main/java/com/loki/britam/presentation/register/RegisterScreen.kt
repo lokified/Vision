@@ -65,8 +65,7 @@ fun RegisterScreen(
                 imageVector = Icons.Filled.Grain,
                 contentDescription = null,
                 modifier = Modifier.size(70.dp)
-                    .padding(top = 16.dp),
-                colorFilter = ColorFilter.tint(color = Color.Black)
+                    .padding(top = 16.dp)
             )
             Text(text = "Vision")
         }
@@ -144,16 +143,6 @@ fun RegisterScreen(
                 keyboardType = KeyboardType.Password
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Already have an account? Login",
-                fontSize = 18.sp,
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .clickable { openScreen(Screens.LoginScreen.route) }
-            )
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
@@ -172,6 +161,16 @@ fun RegisterScreen(
             ) {
                 Text(text = "Register")
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Already have an account? Login",
+                fontSize = 18.sp,
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .clickable { openScreen(Screens.LoginScreen.route) }
+            )
         }
     }
 }

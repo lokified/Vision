@@ -46,7 +46,6 @@ fun NewCompanyScreen(
     val type = formState.getState<TextFieldState>("BusinessType")
     val location = formState.getState<TextFieldState>("BusinessLocation")
     val description = formState.getState<TextFieldState>("BusinessDescription")
-    val estimate = formState.getState<TextFieldState>("Estimate")
 
     Scaffold (
         topBar = {
@@ -111,17 +110,6 @@ fun NewCompanyScreen(
                     onValueChange = { location.change(it) },
                     errorMessage = location.errorMessage,
                     isError = location.hasError
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                DefaultInput(
-                    value = estimate.value,
-                    label = "Enter Estimate Amount",
-                    onValueChange = { estimate.change(it) },
-                    errorMessage = estimate.errorMessage,
-                    isError = estimate.hasError,
-                    keyboardType = KeyboardType.Phone
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
