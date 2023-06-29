@@ -83,6 +83,7 @@ fun WalletScreen(
 
         TopSection(
             modifier = Modifier.padding(16.dp),
+            name = viewModel.name.value,
             openScreen = openScreen
         )
         
@@ -150,6 +151,7 @@ fun WalletScreen(
 @Composable
 fun TopSection(
     modifier: Modifier = Modifier,
+    name: String,
     openScreen: (String) -> Unit
 ) {
     
@@ -170,7 +172,7 @@ fun TopSection(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Hello John Doe",
+                    text = "Hello $name",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -547,15 +549,5 @@ fun ContactItem(
         Spacer(modifier = Modifier.height(2.dp))
 
         Text(text = contact.name, fontSize = 12.sp)
-    }
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-fun WalletPreview() {
-    BritamTheme {
-        WalletScreen(viewModel = WalletViewModel(), openScreen = {})
     }
 }

@@ -77,13 +77,3 @@ fun TransactionCard(
         )
     }
 }
-
-@Preview(
-    showBackground = true
-)
-@Composable
-fun WalletPreview() {
-    BritamTheme {
-        WalletScreen(viewModel = WalletViewModel(), openScreen = {})
-    }
-}

@@ -168,7 +168,7 @@ fun Navigation(appState: AppState) {
             }
         ) {
 
-            val viewModel = WalletViewModel()
+            val viewModel = hiltViewModel<WalletViewModel>()
             WalletScreen(
                 viewModel = viewModel,
                 openScreen = { appState.navigate(it) }
