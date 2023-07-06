@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -118,6 +119,9 @@ dependencies {
     implementation("com.google.accompanist:accompanist-navigation-animation:0.31.4-beta")
 
     //firebase
-    implementation("com.google.firebase:firebase-auth-ktx:22.0.0")
-    implementation(platform("com.google.firebase:firebase-bom:31.0.0"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-perf-ktx")
+    implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 }

@@ -64,7 +64,7 @@ fun IconBoxItem(
     icon: ImageVector,
     height: Dp = 70.dp,
     width: Dp = 160.dp,
-    onClick: (String) -> Unit
+    onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -74,7 +74,7 @@ fun IconBoxItem(
                 color = MaterialTheme.colorScheme.primary,
                 shape = RoundedCornerShape(4.dp)
             )
-            .clickable { onClick(name) },
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
 
@@ -100,15 +100,5 @@ fun IconBoxItem(
                 .padding(horizontal = 8.dp)
                 .align(Alignment.Center)
         )
-    }
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-fun BoxItemPreview() {
-    BritamTheme {
-        BoxItem(name = "Britam Loan", onClick = {})
     }
 }

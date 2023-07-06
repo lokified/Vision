@@ -3,6 +3,7 @@ package com.loki.britam.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.loki.britam.presentation.components.BottomBar
+import com.loki.britam.presentation.login.LoginViewModel
 import com.loki.britam.presentation.navigation.Navigation
 import com.loki.britam.presentation.theme.BritamTheme
 import dagger.hilt.android.AndroidEntryPoint

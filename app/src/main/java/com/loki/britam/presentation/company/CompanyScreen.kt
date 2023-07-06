@@ -1,7 +1,5 @@
 package com.loki.britam.presentation.company
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,28 +25,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.britam.data.remote.firebase.models.Expense
+import com.loki.britam.data.remote.firebase.models.Insurance
+import com.loki.britam.data.remote.firebase.models.Loan
 import com.loki.britam.presentation.common.BackgroundCurves
 import com.loki.britam.presentation.common.EmptyBox
 import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.common.IconBackgroundCurves
 import com.loki.britam.presentation.navigation.Screens
-import com.loki.britam.presentation.theme.BritamTheme
 
 @Composable
 fun CompanyScreen(
-    title: String,
     viewModel: CompanyViewModel,
     openScreen: (String) -> Unit
 ) {
 
+    val company = viewModel.company.value
+    val data by viewModel.data.collectAsStateWithLifecycle()
+    val companyData = data.companyData
 
     Column(
         modifier = Modifier
@@ -72,33 +75,34 @@ fun CompanyScreen(
                 )
         ) {
 
-            Text(
-                text = title,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .align(
-                        Alignment.BottomStart
-                    )
-                    .padding(start = 16.dp)
-            )
+            company?.let { company->
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .align(
-                        Alignment.BottomEnd
-                    )
-                    .padding(end = 16.dp)
-            ) {
-                Icon(imageVector = Icons.Filled.LocationCity, contentDescription = null)
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "Location", fontSize = 12.sp)
+                Text(
+                    text = company.name,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(
+                            Alignment.BottomStart
+                        )
+                        .padding(start = 16.dp)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .align(
+                            Alignment.BottomEnd
+                        )
+                        .padding(end = 16.dp)
+                ) {
+                    Icon(imageVector = Icons.Filled.LocationCity, contentDescription = null)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(text = company.location, fontSize = 12.sp)
+                }
             }
-
         }
-
 
         LazyColumn (
             contentPadding = PaddingValues(16.dp)
@@ -111,17 +115,16 @@ fun CompanyScreen(
                 )
             }
 
-            if (viewModel.insurance.isEmpty()) {
+            if (companyData.insurances!!.isEmpty()) {
                 item {
                     EmptyBox(content = "No active Insurance")
                 }
-            }
-            else {
-                items(viewModel.insurance) { insurance ->
+            } else {
+                items(companyData.insurances) { insurance ->
 
                     ActiveInsuranceCard(
                         modifier = Modifier.padding(vertical = 4.dp),
-                        companyInsurance = insurance
+                        insurance = insurance
                     )
                 }
             }
@@ -133,13 +136,12 @@ fun CompanyScreen(
                 )
             }
 
-            if (viewModel.investments.isEmpty()) {
+            if (companyData.investment!!.isEmpty()) {
                 item {
                     EmptyBox(content = "No active Investments")
                 }
-            }
-            else {
-                items(viewModel.investments) { investment ->
+            } else {
+                items(companyData.investment) { investment ->
 
 
                 }
@@ -152,13 +154,12 @@ fun CompanyScreen(
                 )
             }
 
-            if (viewModel.loans.isEmpty()) {
+            if (companyData.loans!!.isEmpty()) {
                 item {
                     EmptyBox(content = "No active Loans")
                 }
-            }
-            else {
-                items(viewModel.loans) { loan ->
+            } else {
+                items(companyData.loans) { loan ->
 
                     ActiveLoanCard(
                         modifier = Modifier.padding(vertical = 4.dp),
@@ -204,13 +205,12 @@ fun CompanyScreen(
                 )
             }
 
-            if (viewModel.expenses.isEmpty()) {
+            if (companyData.expense!!.isEmpty()) {
                 item {
                     EmptyBox(content = "No expenses recorded")
                 }
-            }
-            else {
-                items(viewModel.expenses) { expense ->
+            } else {
+                items(companyData.expense) { expense ->
 
                     ExpenseCard(
                         expense = expense
@@ -224,7 +224,7 @@ fun CompanyScreen(
 @Composable
 fun ActiveInsuranceCard(
     modifier: Modifier = Modifier,
-    companyInsurance: CompanyInsurance
+    insurance: Insurance
 ) {
 
     Box (
@@ -246,7 +246,7 @@ fun ActiveInsuranceCard(
         ) {
 
             Text(
-                text = companyInsurance.name,
+                text = insurance.name,
                 fontSize = 18.sp,
                 color = Color.White.copy(.8f)
             )
@@ -254,8 +254,8 @@ fun ActiveInsuranceCard(
         }
 
         Text(
-            text = if (companyInsurance.isActive) "Active" else "Inactive",
-            color = if (companyInsurance.isActive) Color.Green.copy(.8f) else Color.Red.copy(.8f),
+            text = if (insurance.isActive) "Active" else "Inactive",
+            color = if (insurance.isActive) Color.Green.copy(.8f) else Color.Red.copy(.8f),
             fontSize = 12.sp,
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -332,8 +332,8 @@ fun ExpenseCard(
     expense: Expense
 ) {
 
-    val sign = if (expense.isProfit) "+" else "-"
-    val color = if (expense.isProfit) Color.Green.copy(.7f) else Color.Red.copy(.7f)
+//    val sign = if (expense.isProfit) "+${expense.profitLoss}" else "-${expense.profitLoss}"
+//    val color = if (expense.isProfit) Color.Green.copy(.7f) else Color.Red.copy(.7f)
 
     Box (
         modifier = modifier
@@ -359,24 +359,9 @@ fun ExpenseCard(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "$sign${expense.amount}",
+                text = expense.profitLoss,
                 fontSize = 18.sp,
-                color = color
             )
-        }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    uiMode = UI_MODE_NIGHT_NO,
-    heightDp = 2000
-)
-@Composable
-fun CompanyScreenPreview() {
-    BritamTheme {
-        CompanyScreen(title = "Loki", viewModel = CompanyViewModel()) {
-
         }
     }
 }

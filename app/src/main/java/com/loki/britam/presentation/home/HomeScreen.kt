@@ -1,6 +1,5 @@
 package com.loki.britam.presentation.home
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,22 +42,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.loki.britam.data.Company
-import com.loki.britam.data.companies
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.britam.data.otherCompanies
+import com.loki.britam.data.remote.firebase.models.Company
 import com.loki.britam.presentation.common.BoxItem
 import com.loki.britam.presentation.common.HeaderSection
 import com.loki.britam.presentation.common.IconBoxItem
 import com.loki.britam.presentation.navigation.Screens
-import com.loki.britam.presentation.theme.BritamTheme
 
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
     openScreen: (String) -> Unit
 ) {
+
+    val companyList by viewModel.companies.collectAsStateWithLifecycle(initialValue = emptyList())
 
     LazyColumn(
         modifier = Modifier
@@ -82,9 +82,9 @@ fun HomeScreen(
 
         item {
             NewCompanySection(
-                companies = viewModel.companies,
+                companies = companyList,
                 onAddCompanyClick = { openScreen(Screens.NewCompanyScreen.route) },
-                onCompanyClick = { openScreen(Screens.CompanyScreen.navWithCompanyTitle(it)) }
+                onCompanyClick = { openScreen(Screens.CompanyScreen.navWithCompanyId(it)) }
             )
         }
 
@@ -150,7 +150,7 @@ fun HomeScreen(
             )
         }
 
-        items(companies) { company ->
+        items(otherCompanies) { company ->
             CompanyCard(
                 company = company,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
@@ -198,7 +198,7 @@ fun SearchSection(
 @Composable
 fun NewCompanySection(
     modifier: Modifier = Modifier,
-    companies: List<String>,
+    companies: List<Company>,
     onAddCompanyClick: () -> Unit,
     onCompanyClick: (String) -> Unit
 ) {
@@ -240,11 +240,11 @@ fun NewCompanySection(
             }
         }
 
-        items(companies) { name ->
+        items(companies) { company ->
             IconBoxItem(
-                name = name,
+                name = company.name,
                 icon = Icons.Filled.Business,
-                onClick = onCompanyClick
+                onClick = { onCompanyClick(company.id) }
             )
         }
     }
@@ -281,7 +281,7 @@ fun LoanSection(
     ) {
 
         items(products) { name ->
-            IconBoxItem(name = name, icon = Icons.Filled.Money ,onClick = onClick)
+            IconBoxItem(name = name, icon = Icons.Filled.Money ,onClick = { onClick(name) })
         }
     }
 }
@@ -289,7 +289,7 @@ fun LoanSection(
 @Composable
 fun CompanyCard(
     modifier: Modifier = Modifier,
-    company: Company
+    company: com.loki.britam.data.Company
 ) {
 
     val data = company.data[0]
@@ -348,16 +348,5 @@ fun CompanyItem(
         Text(text = title, fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = value, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-    }
-}
-
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
-@Composable
-fun InsuranceScreenPreview() {
-    BritamTheme {
-        HomeScreen(viewModel = HomeViewModel(),openScreen = {})
     }
 }

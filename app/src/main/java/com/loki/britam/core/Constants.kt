@@ -4,5 +4,6 @@ object Constants {
 
     const val BASE_URL = "https://"
     const val TITLE = "title"
+    const val COMPANY_ID = "company_id"
 
 }

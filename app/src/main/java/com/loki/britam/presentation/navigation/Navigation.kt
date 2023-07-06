@@ -1,9 +1,7 @@
 package com.loki.britam.presentation.navigation
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -12,6 +10,7 @@ import androidx.navigation.navArgument
 import com.loki.britam.core.Constants.TITLE
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.loki.britam.core.Constants.COMPANY_ID
 import com.loki.britam.presentation.AppState
 import com.loki.britam.presentation.account.AccountScreen
 import com.loki.britam.presentation.account.AccountViewModel
@@ -123,7 +122,7 @@ fun Navigation(appState: AppState) {
             }
         ) {
 
-            val viewModel = HomeViewModel()
+            val viewModel = hiltViewModel<HomeViewModel>()
             HomeScreen(
                 viewModel = viewModel,
                 openScreen = { appState.navigate(it) }
@@ -212,32 +211,32 @@ fun Navigation(appState: AppState) {
 
         composable(route = Screens.NewCompanyScreen.route) {
 
+            val viewModel = hiltViewModel<NewCompanyViewModel>()
             NewCompanyScreen(
-                viewModel = NewCompanyViewModel(),
+                viewModel = viewModel,
                 popScreen = { appState.popUp() }
             )
         }
 
         composable(
-            route = Screens.CompanyScreen.withCompanyTitle(),
+            route = Screens.CompanyScreen.withCompanyId(),
             arguments = listOf(
-                navArgument(name = TITLE) {
+                navArgument(name = COMPANY_ID) {
                     type = NavType.StringType
                 }
             )
         ) {
 
-            val title = it.arguments?.getString(TITLE)!!
-            val viewModel = CompanyViewModel()
+            val viewModel = hiltViewModel<CompanyViewModel>()
             CompanyScreen(
-                title = title,
                 viewModel = viewModel,
                 openScreen = { appState.navigate(it) }
             )
         }
 
         composable(route = Screens.NewExpenseScreen.route) {
-            val viewModel = CompanyViewModel()
+
+            val viewModel = hiltViewModel<CompanyViewModel>()
 
             NewExpenseScreen(
                 viewModel = viewModel,
@@ -327,11 +326,11 @@ sealed class Screens(val route: String) {
         return "${ApplyScreen.route}/$title"
     }
 
-    fun withCompanyTitle(): String {
-        return "${CompanyScreen.route}/{$TITLE}"
+    fun withCompanyId(): String {
+        return "${CompanyScreen.route}/{$COMPANY_ID}"
     }
 
-    fun navWithCompanyTitle(title: String): String {
-        return "${CompanyScreen.route}/$title"
+    fun navWithCompanyId(id: String): String {
+        return "${CompanyScreen.route}/$id"
     }
 }
