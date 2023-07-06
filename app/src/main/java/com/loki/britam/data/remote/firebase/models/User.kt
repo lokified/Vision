@@ -1,4 +1,4 @@
-package com.loki.britam.data.remote.firebase
+package com.loki.britam.data.remote.firebase.models
 
 data class User(
     val id: String = "",

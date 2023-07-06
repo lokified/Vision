@@ -12,6 +12,8 @@ open class VisionViewModel(
     private val datastore: DataStoreStorage
 ) : ViewModel() {
 
+    var errorMessage = mutableStateOf("")
+    var isLoading = mutableStateOf(false)
 
     val name = mutableStateOf("")
     val email = mutableStateOf("")

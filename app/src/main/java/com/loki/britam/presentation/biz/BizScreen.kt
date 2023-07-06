@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import com.loki.britam.data.Company
 import com.loki.britam.presentation.common.DropDownInput
 import com.loki.britam.presentation.common.HeaderSection
+import com.loki.britam.presentation.common.MonthBox
 import com.loki.britam.presentation.theme.BritamTheme
 import com.loki.britam.util.MonthUtils
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
@@ -69,8 +70,8 @@ fun BizScreen(
 
     val companies = viewModel.otherCompanyList.map { it.name }
     var selectedBusiness by rememberSaveable { mutableStateOf("Other Business") }
-    var selectedMonth by rememberSaveable { mutableStateOf("May") }
-
+    val currentMonth = MonthUtils.getCurrentMonth()
+    var selectedMonth by remember { mutableStateOf(currentMonth) }
     var isExpanded by remember { mutableStateOf(false) }
 
 
@@ -140,36 +141,15 @@ fun BizScreen(
                             }
                         }
 
-                        val months = MonthUtils.months
 
-                        DropdownMenu(
-                            expanded = isExpanded,
-                            onDismissRequest = { isExpanded = false },
-                            modifier = Modifier.height(300.dp),
-                            scrollState = rememberScrollState(),
-                            offset = DpOffset(-40.dp, -40.dp)
-                        ) {
-                            months.forEach {
-
-                                DropdownMenuItem(
-                                    onClick = {
-                                        isExpanded = false
-                                        selectedMonth = it
-                                    },
-                                    text = {
-                                        Text(
-                                            text = it,
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(
-                                                    horizontal = 16.dp,
-                                                    vertical = 12.dp
-                                                ),
-                                        )
-                                    }
-                                )
-                            }
-                        }
+                        MonthBox(
+                            isExpanded = isExpanded,
+                            onClick = {
+                                selectedMonth = it
+                                isExpanded = false
+                            },
+                            onDismiss = { isExpanded = false }
+                        )
                     },
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
@@ -355,15 +335,5 @@ fun RowSection(
 
         Text(text = content, fontWeight = FontWeight.Normal, fontSize = 16.sp)
 
-    }
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-fun BizPreview() {
-    BritamTheme {
-        BizScreen(viewModel = BizViewModel())
     }
 }

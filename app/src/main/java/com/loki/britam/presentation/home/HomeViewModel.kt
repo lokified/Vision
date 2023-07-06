@@ -1,12 +1,19 @@
 package com.loki.britam.presentation.home
 
-import androidx.lifecycle.ViewModel
+import com.loki.britam.data.local.datastore.DataStoreStorage
+import com.loki.britam.data.remote.firebase.company.CompanyStorage
+import com.loki.britam.presentation.VisionViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel: ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    dataStore: DataStoreStorage,
+    private val storage: CompanyStorage
+): VisionViewModel(dataStore) {
 
-    val companies = mutableListOf("Loki")
 
-    fun addCompany(name: String) {
-        companies.add(name)
-    }
+    val companies = storage.companies
+
+
 }

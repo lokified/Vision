@@ -31,7 +31,7 @@ val lokiBusiness = Company(
     )
 )
 
-val companies = listOf(
+val otherCompanies = listOf(
     Company(
         name = "Brooksite",
         data = listOf(

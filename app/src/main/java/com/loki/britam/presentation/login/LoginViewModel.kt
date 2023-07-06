@@ -1,6 +1,5 @@
 package com.loki.britam.presentation.login
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.dsc.form_builder.FormState
 import com.dsc.form_builder.TextFieldState
@@ -8,7 +7,7 @@ import com.dsc.form_builder.Validators
 import com.google.firebase.FirebaseException
 import com.loki.britam.data.local.datastore.DataStoreStorage
 import com.loki.britam.data.local.datastore.User
-import com.loki.britam.data.remote.firebase.FirebaseAccountRepository
+import com.loki.britam.data.remote.firebase.auth.FirebaseAccountRepository
 import com.loki.britam.presentation.VisionViewModel
 import com.loki.britam.presentation.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,9 +36,6 @@ class LoginViewModel @Inject constructor(
             )
         )
     )
-
-    var errorMessage = mutableStateOf("")
-    var isLoading = mutableStateOf(false)
 
 
     fun login(email: String, password: String, openAndPopUp: (String, String) -> Unit) {
