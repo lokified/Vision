@@ -1,7 +1,8 @@
-package com.loki.britam.data.remote.firebase
+package com.loki.britam.data.remote.firebase.auth
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.loki.britam.data.remote.firebase.models.User
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

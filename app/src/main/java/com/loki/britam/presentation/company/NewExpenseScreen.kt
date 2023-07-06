@@ -1,7 +1,9 @@
 package com.loki.britam.presentation.company
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,21 +17,31 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dsc.form_builder.TextFieldState
+import com.loki.britam.data.remote.firebase.models.Expense
 import com.loki.britam.presentation.common.DefaultInput
+import com.loki.britam.presentation.common.Loading
+import com.loki.britam.presentation.common.MonthBox
+import com.loki.britam.presentation.common.SingleBorderInput
+import com.loki.britam.util.MonthUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +56,12 @@ fun NewExpenseScreen(
     val marketing = formState.getState<TextFieldState>("Marketing")
     val profit = formState.getState<TextFieldState>("Profit")
 
+    val currentMonth = MonthUtils.getCurrentMonth()
+    var selectedMonth by remember { mutableStateOf(currentMonth) }
+    var isExpanded by remember { mutableStateOf(false) }
+
+    var isLossChecked by remember { mutableStateOf(false) }
+
     Scaffold (
         topBar = {
             TopAppBar(
@@ -56,11 +74,25 @@ fun NewExpenseScreen(
                     Text(text = "New Expense")
                 },
                 actions = {
-                    Text(text = "Month", fontSize = 12.sp)
+                    Text(text = selectedMonth, fontSize = 12.sp)
                     Spacer(modifier = Modifier.width(4.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(imageVector = Icons.Filled.CalendarMonth, contentDescription = null)
+
+                    IconButton(onClick = { isExpanded = true }) {
+                        Icon(
+                            imageVector = Icons.Filled.CalendarMonth,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary.copy(.8f)
+                        )
                     }
+
+                    MonthBox(
+                        isExpanded = isExpanded,
+                        onClick = {
+                            selectedMonth = it
+                            isExpanded = false
+                        },
+                        onDismiss = { isExpanded = false }
+                    )
                 }
             )
         }
@@ -84,7 +116,7 @@ fun NewExpenseScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                DefaultInput(
+                SingleBorderInput(
                     value = salary.value,
                     label = "Amount used for Salaries",
                     onValueChange = { salary.change(it) },
@@ -95,7 +127,7 @@ fun NewExpenseScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                DefaultInput(
+                SingleBorderInput(
                     value = taxes.value,
                     label = "Taxes Paid",
                     onValueChange = { taxes.change(it) },
@@ -106,7 +138,7 @@ fun NewExpenseScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                DefaultInput(
+                SingleBorderInput(
                     value = marketing.value,
                     label = "Amount used for Marketing",
                     onValueChange = { marketing.change(it) },
@@ -117,16 +149,34 @@ fun NewExpenseScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                DefaultInput(
-                    value = profit.value,
-                    label = "Enter Profit/Loss",
-                    onValueChange = { profit.change(it) },
-                    errorMessage = profit.errorMessage,
-                    isError = profit.hasError,
-                    keyboardType = KeyboardType.Number
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    SingleBorderInput(
+                        value = profit.value,
+                        label = "Enter Profit/Loss",
+                        onValueChange = { profit.change(it) },
+                        errorMessage = profit.errorMessage,
+                        isError = profit.hasError,
+                        keyboardType = KeyboardType.Number,
+                        isProfit = !isLossChecked,
+                        isProfitField = true,
+                        modifier = Modifier.fillMaxWidth(.8f)
+                    )
 
-                Spacer(modifier = Modifier.height(55.dp))
+                    Checkbox(
+                        checked = isLossChecked,
+                        onCheckedChange = { isLossChecked = it}
+                    )
+
+                    Text(text = "Loss")
+                }
+
+
+                if (viewModel.isLoading.value) {
+                    Loading()
+                }
             }
 
             Box(
@@ -141,7 +191,17 @@ fun NewExpenseScreen(
                     shape = RoundedCornerShape(4.dp),
                     onClick = {
                         if (formState.validate()) {
-                            popScreen()
+                            viewModel.addCompanyExpense(
+                                Expense(
+                                    month = selectedMonth,
+                                    salary = salary.value,
+                                    marketing = marketing.value,
+                                    profitLoss = profit.value,
+                                    taxes = taxes.value,
+                                    isProfit = isLossChecked
+                                ),
+                                popScreen
+                            )
                         }
                     }
                 ) {

@@ -6,7 +6,7 @@ import com.dsc.form_builder.TextFieldState
 import com.dsc.form_builder.Validators
 import com.google.firebase.FirebaseException
 import com.loki.britam.data.local.datastore.DataStoreStorage
-import com.loki.britam.data.remote.firebase.FirebaseAccountRepository
+import com.loki.britam.data.remote.firebase.auth.FirebaseAccountRepository
 import com.loki.britam.presentation.VisionViewModel
 import com.loki.britam.presentation.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,9 +46,6 @@ class RegisterViewModel @Inject constructor (
             )
         )
     )
-
-    var errorMessage = mutableStateOf("")
-    var isLoading = mutableStateOf(false)
 
     fun register(name: String, email: String, password: String, openScreen: (String) -> Unit) {
 

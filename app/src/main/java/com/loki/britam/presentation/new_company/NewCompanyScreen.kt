@@ -1,14 +1,12 @@
 package com.loki.britam.presentation.new_company
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,16 +21,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dsc.form_builder.TextFieldState
+import com.loki.britam.data.remote.firebase.models.Company
 import com.loki.britam.presentation.common.DefaultInput
-import com.loki.britam.presentation.theme.BritamTheme
+import com.loki.britam.presentation.common.Loading
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +39,18 @@ fun NewCompanyScreen(
     viewModel: NewCompanyViewModel,
     popScreen: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit ) {
+        if (viewModel.errorMessage.value.isNotBlank()) {
+            Toast.makeText(
+                context,
+                viewModel.errorMessage.value,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     val formState = remember { viewModel.newCompanyFormState }
     val name = formState.getState<TextFieldState>("BusinessName")
@@ -123,11 +134,14 @@ fun NewCompanyScreen(
                     modifier = Modifier.height(120.dp)
                 )
 
-                Spacer(modifier = Modifier.height(55.dp))
+                if (viewModel.isLoading.value) {
+                    Loading()
+                }
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(16.dp)
             ) {
@@ -137,7 +151,15 @@ fun NewCompanyScreen(
                     shape = RoundedCornerShape(4.dp),
                     onClick = {
                         if (formState.validate()) {
-                            popScreen()
+                            viewModel.saveCompany(
+                                Company(
+                                    name = name.value,
+                                    businessType = type.value,
+                                    location = location.value,
+                                    description = description.value
+                                ),
+                                popScreen
+                            )
                         }
                     }
                 ) {
@@ -145,17 +167,5 @@ fun NewCompanyScreen(
                 }
             }
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES
-)
-@Composable
-fun NewCompanyScreenPreview() {
-
-    BritamTheme {
-        NewCompanyScreen(popScreen = {}, viewModel = NewCompanyViewModel())
     }
 }
