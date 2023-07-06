@@ -3,7 +3,7 @@ package com.loki.britam.presentation.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.loki.britam.data.local.datastore.DataStoreStorage
-import com.loki.britam.data.remote.firebase.FirebaseAccountRepository
+import com.loki.britam.data.remote.firebase.auth.FirebaseAccountRepository
 import com.loki.britam.presentation.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map

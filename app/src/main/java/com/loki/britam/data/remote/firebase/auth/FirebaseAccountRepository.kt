@@ -1,5 +1,6 @@
-package com.loki.britam.data.remote.firebase
+package com.loki.britam.data.remote.firebase.auth
 
+import com.loki.britam.data.remote.firebase.models.User
 import kotlinx.coroutines.flow.Flow
 
 interface FirebaseAccountRepository {
