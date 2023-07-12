@@ -74,7 +74,7 @@ fun HomeScreen(
 
         item {
             HeaderSection(
-                header = "My Company",
+                header = "My OtherCompany",
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             )
         }
@@ -152,7 +152,7 @@ fun HomeScreen(
 
         items(otherCompanies) { company ->
             CompanyCard(
-                company = company,
+                otherCompany = company,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
             )
         }
@@ -289,10 +289,10 @@ fun LoanSection(
 @Composable
 fun CompanyCard(
     modifier: Modifier = Modifier,
-    company: com.loki.britam.data.Company
+    otherCompany: com.loki.britam.data.OtherCompany
 ) {
 
-    val data = company.data[0]
+    val data = otherCompany.data[0]
 
     Box(modifier = modifier.fillMaxWidth()) {
         Card(
@@ -302,7 +302,7 @@ fun CompanyCard(
             )
         ) {
             Text(
-                text = company.name,
+                text = otherCompany.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(12.dp)

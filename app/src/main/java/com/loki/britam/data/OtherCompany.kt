@@ -3,7 +3,7 @@ package com.loki.britam.data
 import com.patrykandpatrick.vico.core.entry.FloatEntry
 import com.patrykandpatrick.vico.core.entry.entriesOf
 
-data class Company(
+data class OtherCompany(
     val name: String,
     val data: List<Data>,
 )
@@ -17,7 +17,7 @@ data class Data(
     val model: List<FloatEntry>,
 )
 
-val lokiBusiness = Company(
+val lokiBusiness = OtherCompany(
     name = "Loki",
     data = listOf(
         Data(
@@ -32,7 +32,7 @@ val lokiBusiness = Company(
 )
 
 val otherCompanies = listOf(
-    Company(
+    OtherCompany(
         name = "Brooksite",
         data = listOf(
             Data(
@@ -46,7 +46,7 @@ val otherCompanies = listOf(
         )
 
     ),
-    Company(
+    OtherCompany(
         name = "Krits",
         data = listOf(
             Data(
@@ -59,7 +59,7 @@ val otherCompanies = listOf(
             )
         )
     ),
-    Company(
+    OtherCompany(
         name = "Oplib",
         data = listOf(
             Data(

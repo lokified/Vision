@@ -11,6 +11,8 @@ import com.loki.britam.core.Constants.TITLE
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.loki.britam.core.Constants.COMPANY_ID
+import com.loki.britam.core.Constants.EXPENSE_DEFAULT_ID
+import com.loki.britam.core.Constants.EXPENSE_ID
 import com.loki.britam.presentation.AppState
 import com.loki.britam.presentation.account.AccountScreen
 import com.loki.britam.presentation.account.AccountViewModel
@@ -18,7 +20,7 @@ import com.loki.britam.presentation.biz.BizScreen
 import com.loki.britam.presentation.biz.BizViewModel
 import com.loki.britam.presentation.company.CompanyScreen
 import com.loki.britam.presentation.company.CompanyViewModel
-import com.loki.britam.presentation.company.NewExpenseScreen
+import com.loki.britam.presentation.company.AddEditExpenseScreen
 import com.loki.britam.presentation.home.HomeScreen
 import com.loki.britam.presentation.home.HomeViewModel
 import com.loki.britam.presentation.products.ApplyScreen
@@ -135,7 +137,7 @@ fun Navigation(appState: AppState) {
             exitTransition = null
         ) {
 
-            val viewModel = BizViewModel()
+            val viewModel = hiltViewModel<BizViewModel>()
             BizScreen(
                 viewModel = viewModel
             )
@@ -234,11 +236,18 @@ fun Navigation(appState: AppState) {
             )
         }
 
-        composable(route = Screens.NewExpenseScreen.route) {
+        composable(
+            route = Screens.AddEditExpenseScreen.withExpenseId(),
+            arguments = listOf(
+                navArgument(EXPENSE_ID) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
 
             val viewModel = hiltViewModel<CompanyViewModel>()
 
-            NewExpenseScreen(
+            AddEditExpenseScreen(
                 viewModel = viewModel,
                 popScreen = { appState.popUp() }
             )
@@ -313,24 +322,20 @@ sealed class Screens(val route: String) {
     object ApplyScreen: Screens("apply_screen")
     object NewCompanyScreen: Screens("new_company_screen")
     object CompanyScreen: Screens("company_screen")
-    object NewExpenseScreen: Screens("new_expense_screen")
+    object AddEditExpenseScreen: Screens("add_edit_expense_screen")
     object TransactionsScreen: Screens("transactions_screen")
     object InvestScreen: Screens("invest_screen")
     object AccountScreen: Screens("account_screen")
 
-    fun withApplyTitle(): String {
-        return "${ApplyScreen.route}/{$TITLE}"
-    }
+    fun withApplyTitle(): String = "${ApplyScreen.route}/{$TITLE}"
 
-    fun navWithApplyTitle(title: String): String {
-        return "${ApplyScreen.route}/$title"
-    }
+    fun navWithApplyTitle(title: String): String = "${ApplyScreen.route}/$title"
 
-    fun withCompanyId(): String {
-        return "${CompanyScreen.route}/{$COMPANY_ID}"
-    }
+    fun withCompanyId(): String ="${CompanyScreen.route}/{$COMPANY_ID}"
 
-    fun navWithCompanyId(id: String): String {
-        return "${CompanyScreen.route}/$id"
-    }
+    fun navWithCompanyId(id: String): String = "${CompanyScreen.route}/$id"
+
+    fun withExpenseId(): String = "${AddEditExpenseScreen.route}/{$EXPENSE_ID}"
+
+    fun navWithExpenseId(id: String): String = "${AddEditExpenseScreen.route}/$id"
 }
