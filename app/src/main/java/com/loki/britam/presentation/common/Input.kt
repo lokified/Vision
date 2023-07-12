@@ -137,7 +137,7 @@ fun SingleBorderInput(
 ) {
 
     val focusedColor = if (isProfitField) {
-        if (isProfit) Color.Green else Color.Gray
+        if (isProfit) Color.Green else MaterialTheme.colorScheme.primary.copy(.8f)
     } else {
         MaterialTheme.colorScheme.primary
     }
@@ -165,6 +165,7 @@ fun SingleBorderInput(
             focusedLabelColor = focusedColor,
             focusedTextColor = focusedColor,
             cursorColor = focusedColor,
+            focusedPrefixColor = focusedColor
         ),
         supportingText = {
             if (isError) {

@@ -21,5 +21,11 @@ interface CompanyStorage {
 
     suspend fun addCompanyExpense(expense: Expense)
 
+    suspend fun editCompanyExpense(expense: Expense)
+
+    suspend fun getCompanyExpense(expenseId: String): Expense?
+
     suspend fun addCompanyInvestment(investment: Investment)
+
+    fun updateCompanyId(companyId: String)
 }

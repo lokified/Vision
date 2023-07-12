@@ -2,11 +2,10 @@ package com.loki.britam.presentation.company
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
-import com.dsc.form_builder.FormState
-import com.dsc.form_builder.TextFieldState
-import com.dsc.form_builder.Validators
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.loki.britam.core.Constants.COMPANY_ID
+import com.loki.britam.core.Constants.EXPENSE_DEFAULT_ID
+import com.loki.britam.core.Constants.EXPENSE_ID
 import com.loki.britam.data.local.datastore.DataStoreStorage
 import com.loki.britam.data.remote.firebase.Resource
 import com.loki.britam.data.remote.firebase.models.Company
@@ -26,40 +25,69 @@ class CompanyViewModel @Inject constructor(
     private val storage: CompanyStorage
 ): VisionViewModel(dataStore) {
 
-    val newExpenseFormState = FormState(
-        fields = listOf(
-
-            TextFieldState(
-                name = "Salary",
-                validators = listOf()
-            ),
-            TextFieldState(
-                name = "Taxes",
-                validators = listOf()
-            ),
-            TextFieldState(
-                name = "Marketing",
-                validators = listOf()
-            ),
-            TextFieldState(
-                name = "Profit",
-                validators = listOf(
-                    Validators.Required()
-                )
-            ),
-        )
-    )
-
     private val _data = MutableStateFlow(CompanyState())
     val data = _data.asStateFlow()
 
     var company = mutableStateOf<Company?>(null)
 
+    private val _expense = mutableStateOf(Expense())
+    val expense = _expense
+
+    var isEditScreen = mutableStateOf(false)
+
     init {
-        savedStateHandle.get<String>(COMPANY_ID)?.let { id ->
-            getCompanyDetails(id)
+
+        savedStateHandle.get<String>(COMPANY_ID)?.let { companyId ->
+            getCompanyDetails(companyId)
         }
+
+        savedStateHandle.get<String>(EXPENSE_ID)?.let { expenseId ->
+            launchCatching {
+                if (expenseId != EXPENSE_DEFAULT_ID) {
+                    _expense.value = storage.getCompanyExpense(expenseId) ?: Expense()
+                    isEditScreen.value = true
+                }
+            }
+        }
+
         getCompanyData()
+    }
+
+
+    fun onSalaryFieldChange(newValue: String) {
+        _expense.value = _expense.value.copy(salary = newValue)
+    }
+
+    fun onTaxFieldChange(newValue: String) {
+        _expense.value = _expense.value.copy(taxes = newValue)
+    }
+
+    fun onMarketingFieldChange(newValue: String) {
+        _expense.value = _expense.value.copy(marketing = newValue)
+    }
+
+    fun onUtilitiesFieldChange(newValue: String) {
+        _expense.value = _expense.value.copy(rentAndUtilities = newValue)
+    }
+
+    fun onProfitLossFieldChange(newValue: String) {
+        _expense.value = _expense.value.copy(profitLoss = newValue)
+    }
+
+    fun onMonthChange(newValue: String) {
+        _expense.value = _expense.value.copy(month = newValue)
+    }
+
+    fun onStartDateChange(newValue: Long) {
+        _expense.value = _expense.value.copy(startDate = newValue)
+    }
+
+    fun onEndDateChange(newValue: Long) {
+        _expense.value = _expense.value.copy(endDate = newValue)
+    }
+
+    fun onIsProfitLossChange(newValue: Boolean) {
+        _expense.value = _expense.value.copy(loss = newValue)
     }
 
     private fun getCompanyDetails(id: String) {
@@ -77,22 +105,23 @@ class CompanyViewModel @Inject constructor(
         }
     }
 
-    fun addCompanyExpense(expense: Expense, popScreen: () -> Unit) {
+    fun addCompanyExpense(popScreen: () -> Unit) {
 
         launchCatching {
 
             try {
                 isLoading.value = true
-                storage.addCompanyExpense(
-                    expense = Expense(
-                        month = expense.month,
-                        isProfit = expense.isProfit,
-                        taxes = expense.taxes,
-                        marketing = expense.marketing,
-                        salary = expense.salary,
-                        profitLoss = expense.profitLoss
+
+                if (!isEditScreen.value) {
+                    storage.addCompanyExpense(
+                        expense = _expense.value
                     )
-                )
+                } else {
+                    storage.editCompanyExpense(
+                        expense = _expense.value
+                    )
+                }
+
                 isLoading.value = false
                 popScreen()
             }

@@ -40,8 +40,8 @@ class CompanyStorageImpl @Inject constructor(
             trySend(Resource.Loading())
 
             val expDoc = firestore.collection(COMPANY_DATA_COLLECTION)
-                .document(COMPANY_EXPENSE_COLLECTION)
-                .collection(EXPENSES)
+                .document(EXPENSES)
+                .collection(COMPANY_EXPENSE_COLLECTION)
                 .whereEqualTo(COMPANY_ID_FIELD, companyIds.value)
                 .addSnapshotListener { snapshot, error ->
 
@@ -70,8 +70,8 @@ class CompanyStorageImpl @Inject constructor(
             trySend(Resource.Loading())
 
             val invDoc = firestore.collection(COMPANY_DATA_COLLECTION)
-                .document(COMPANY_INVESTMENT_COLLECTION)
-                .collection(INVESTMENT)
+                .document(INVESTMENT)
+                .collection(COMPANY_INVESTMENT_COLLECTION)
                 .whereEqualTo(COMPANY_ID_FIELD, companyIds.value)
                 .addSnapshotListener { snapshot, error ->
 
@@ -114,8 +114,8 @@ class CompanyStorageImpl @Inject constructor(
             val expenseWithId = expense.copy(companyId = companyIds.value)
 
             firestore.collection(COMPANY_DATA_COLLECTION)
-                .document(COMPANY_EXPENSE_COLLECTION)
-                .collection(EXPENSES)
+                .document(EXPENSES)
+                .collection(COMPANY_EXPENSE_COLLECTION)
                 .add(expenseWithId).await()
         }
 
@@ -125,14 +125,40 @@ class CompanyStorageImpl @Inject constructor(
             val investmentWithId = investment.copy(companyId = companyIds.value)
 
             firestore.collection(COMPANY_DATA_COLLECTION)
-                .document(COMPANY_INVESTMENT_COLLECTION)
-                .collection(INVESTMENT)
+                .document(INVESTMENT)
+                .collection(COMPANY_INVESTMENT_COLLECTION)
                 .add(investmentWithId).await()
         }
 
+    override suspend fun getCompanyExpense(expenseId: String): Expense? {
+
+        expenseIds.value = expenseId
+
+        return firestore.collection(COMPANY_DATA_COLLECTION)
+            .document(EXPENSES)
+            .collection(COMPANY_EXPENSE_COLLECTION)
+            .document(expenseId)
+            .get().await().toObject()
+    }
+
+    override suspend fun editCompanyExpense(expense: Expense): Unit =
+        trace(EDIT_COMPANY_EXPENSE) {
+            val expenseWithId = expense.copy(companyId = companyIds.value)
+            firestore.collection(COMPANY_DATA_COLLECTION)
+                .document(EXPENSES)
+                .collection(COMPANY_EXPENSE_COLLECTION)
+                .document(expenseIds.value)
+                .set(expenseWithId).await()
+        }
+
+    override fun updateCompanyId(companyId: String) {
+        companyIds.value = companyId
+    }
+
     companion object {
 
-        val companyIds = mutableStateOf("")
+        var companyIds = mutableStateOf("")
+        val expenseIds = mutableStateOf("")
 
         //company values
         const val COMPANY_COLLECTION = "companies"
@@ -143,13 +169,13 @@ class CompanyStorageImpl @Inject constructor(
         const val COMPANY_ID_FIELD = "companyId"
 
         //company data values
-        const val COMPANY_EXPENSE_COLLECTION = "companiesExpense"
-        const val EXPENSES = "expenses"
-        const val COMPANY_INVESTMENT_COLLECTION = "companiesInvestments"
-        const val INVESTMENT = "investments"
+        const val COMPANY_EXPENSE_COLLECTION = "expenses"
+        const val EXPENSES = "companiesExpense"
+        const val COMPANY_INVESTMENT_COLLECTION = "investments"
+        const val INVESTMENT = "companiesInvestments"
 
         //trace values
-        const val COMPANY_DATA_TRACE = "companiesDataTrace"
+        const val EDIT_COMPANY_EXPENSE = "editExpenseTrace"
         const val ADD_COMPANY_TRACE = "addCompanyTrace"
         const val ADD_COMPANY_EXPENSE_TRACE = "addCompanyExpenseTrace"
         const val ADD_COMPANY_INVESTMENT_TRACE = "addCompanyExpenseTrace"

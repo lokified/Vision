@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.loki.britam.core.Constants.EXPENSE_DEFAULT_ID
 import com.loki.britam.data.remote.firebase.models.Expense
 import com.loki.britam.data.remote.firebase.models.Insurance
 import com.loki.britam.data.remote.firebase.models.Loan
@@ -171,36 +172,17 @@ fun CompanyScreen(
             item {
 
                 HeaderSection(
-                    header = "Company Expenses",
+                    header = "OtherCompany Expenses",
                     modifier = Modifier.padding(vertical = 8.dp),
                     trailingContent = {
-                        Box(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .background(
-                                    color = MaterialTheme.colorScheme.primary.copy(.1f),
-                                    shape = RoundedCornerShape(8.dp)
+                        AddBox(
+                            onClick = {
+                                openScreen(
+                                    Screens.AddEditExpenseScreen
+                                        .navWithExpenseId(EXPENSE_DEFAULT_ID)
                                 )
-                                .clickable { openScreen(Screens.NewExpenseScreen.route) },
-                        ) {
-
-                            Row(
-                                modifier = Modifier
-                                    .padding(8.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-
-                                Text(text = "Add", color = MaterialTheme.colorScheme.primary)
                             }
-
-                        }
+                        )
                     }
                 )
             }
@@ -213,11 +195,47 @@ fun CompanyScreen(
                 items(companyData.expense) { expense ->
 
                     ExpenseCard(
-                        expense = expense
+                        expense = expense,
+                        onClick = {
+                            openScreen(Screens.AddEditExpenseScreen.navWithExpenseId(it))
+                        }
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun AddBox(
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primary.copy(.1f),
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable { onClick() },
+    ) {
+
+        Row(
+            modifier = Modifier
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+
+            Text(text = "Add", color = MaterialTheme.colorScheme.primary)
+        }
+
     }
 }
 
@@ -329,17 +347,19 @@ fun ActiveLoanCard(
 @Composable
 fun ExpenseCard(
     modifier: Modifier = Modifier,
-    expense: Expense
+    expense: Expense,
+    onClick: (String) -> Unit
 ) {
 
-//    val sign = if (expense.isProfit) "+${expense.profitLoss}" else "-${expense.profitLoss}"
-//    val color = if (expense.isProfit) Color.Green.copy(.7f) else Color.Red.copy(.7f)
+    val sign = if (!expense.loss) "+${expense.profitLoss}" else "-${expense.profitLoss}"
+    val color = if (!expense.loss) Color.Green.copy(.7f) else Color.Red.copy(.7f)
 
     Box (
         modifier = modifier
             .background(
                 color = MaterialTheme.colorScheme.primary.copy(.025f)
-            ),
+            )
+            .clickable { onClick(expense.id) },
     ) {
 
         Row(
@@ -359,8 +379,9 @@ fun ExpenseCard(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = expense.profitLoss,
+                text = sign,
                 fontSize = 18.sp,
+                color = color
             )
         }
     }
