@@ -124,4 +124,5 @@ dependencies {
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("com.google.firebase:firebase-messaging-ktx")
 }
