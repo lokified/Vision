@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,32 +35,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.dsc.form_builder.TextFieldState
-import com.loki.britam.data.remote.firebase.models.Expense
-import com.loki.britam.presentation.common.DefaultInput
+import com.loki.britam.presentation.common.DatePicker
 import com.loki.britam.presentation.common.Loading
-import com.loki.britam.presentation.common.MonthBox
 import com.loki.britam.presentation.common.SingleBorderInput
-import com.loki.britam.util.MonthUtils
+import com.loki.britam.util.DateUtils.formatDate
+import com.loki.britam.util.DateUtils.toMonth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewExpenseScreen(
+fun AddEditExpenseScreen(
     viewModel: CompanyViewModel,
     popScreen: () -> Unit
 ) {
 
-    val formState = remember { viewModel.newExpenseFormState }
-    val salary = formState.getState<TextFieldState>("Salary")
-    val taxes = formState.getState<TextFieldState>("Taxes")
-    val marketing = formState.getState<TextFieldState>("Marketing")
-    val profit = formState.getState<TextFieldState>("Profit")
+    val expense by viewModel.expense
+    var selectedStartMonth by remember { mutableStateOf("") }
+    var selectedEndMonth by remember { mutableStateOf("") }
 
-    val currentMonth = MonthUtils.getCurrentMonth()
-    var selectedMonth by remember { mutableStateOf(currentMonth) }
-    var isExpanded by remember { mutableStateOf(false) }
-
-    var isLossChecked by remember { mutableStateOf(false) }
+    val pickerState = rememberDateRangePickerState()
+    var isPickerVisible by remember { mutableStateOf(false) }
 
     Scaffold (
         topBar = {
@@ -74,25 +67,21 @@ fun NewExpenseScreen(
                     Text(text = "New Expense")
                 },
                 actions = {
-                    Text(text = selectedMonth, fontSize = 12.sp)
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
 
-                    IconButton(onClick = { isExpanded = true }) {
-                        Icon(
-                            imageVector = Icons.Filled.CalendarMonth,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary.copy(.8f)
-                        )
+                        Text(text = "Select Month", fontSize = 12.sp)
+                        IconButton(onClick = { isPickerVisible = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.CalendarMonth,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary.copy(.8f)
+                            )
+                        }
                     }
 
-                    MonthBox(
-                        isExpanded = isExpanded,
-                        onClick = {
-                            selectedMonth = it
-                            isExpanded = false
-                        },
-                        onDismiss = { isExpanded = false }
-                    )
                 }
             )
         }
@@ -103,6 +92,17 @@ fun NewExpenseScreen(
                 .fillMaxSize()
                 .padding(it)
         ) {
+
+            Text(
+                text = if (selectedEndMonth.isNotBlank()) getMonth(selectedStartMonth, selectedEndMonth)
+                    else if (expense.month.isNotBlank()) expense.month
+                    else "",
+                fontSize = 15.sp,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp),
+                color = MaterialTheme.colorScheme.primary.copy(.8f)
+            )
 
             Column (
                 modifier = Modifier
@@ -117,33 +117,44 @@ fun NewExpenseScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 SingleBorderInput(
-                    value = salary.value,
+                    value = expense.salary,
                     label = "Amount used for Salaries",
-                    onValueChange = { salary.change(it) },
-                    errorMessage = salary.errorMessage,
-                    isError = salary.hasError,
+                    onValueChange = viewModel::onSalaryFieldChange,
+                    errorMessage = "",
+                    isError = false,
                     keyboardType = KeyboardType.Number
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 SingleBorderInput(
-                    value = taxes.value,
+                    value = expense.taxes,
                     label = "Taxes Paid",
-                    onValueChange = { taxes.change(it) },
-                    errorMessage = taxes.errorMessage,
-                    isError = taxes.hasError,
+                    onValueChange = viewModel::onTaxFieldChange,
+                    errorMessage = "",
+                    isError = false,
                     keyboardType = KeyboardType.Number
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 SingleBorderInput(
-                    value = marketing.value,
+                    value = expense.marketing,
                     label = "Amount used for Marketing",
-                    onValueChange = { marketing.change(it) },
-                    errorMessage = marketing.errorMessage,
-                    isError = marketing.hasError,
+                    onValueChange = viewModel::onMarketingFieldChange,
+                    errorMessage = "",
+                    isError = false,
+                    keyboardType = KeyboardType.Number
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                SingleBorderInput(
+                    value = expense.rentAndUtilities,
+                    label = "Rent And Utilities",
+                    onValueChange = viewModel::onUtilitiesFieldChange,
+                    errorMessage = "",
+                    isError = false,
                     keyboardType = KeyboardType.Number
                 )
 
@@ -154,20 +165,20 @@ fun NewExpenseScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     SingleBorderInput(
-                        value = profit.value,
+                        value = expense.profitLoss,
                         label = "Enter Profit/Loss",
-                        onValueChange = { profit.change(it) },
-                        errorMessage = profit.errorMessage,
-                        isError = profit.hasError,
+                        onValueChange = viewModel::onProfitLossFieldChange,
+                        errorMessage = "",
+                        isError = false,
                         keyboardType = KeyboardType.Number,
-                        isProfit = !isLossChecked,
+                        isProfit = !expense.loss,
                         isProfitField = true,
                         modifier = Modifier.fillMaxWidth(.8f)
                     )
 
                     Checkbox(
-                        checked = isLossChecked,
-                        onCheckedChange = { isLossChecked = it}
+                        checked = expense.loss,
+                        onCheckedChange = viewModel::onIsProfitLossChange
                     )
 
                     Text(text = "Loss")
@@ -190,24 +201,44 @@ fun NewExpenseScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(4.dp),
                     onClick = {
-                        if (formState.validate()) {
-                            viewModel.addCompanyExpense(
-                                Expense(
-                                    month = selectedMonth,
-                                    salary = salary.value,
-                                    marketing = marketing.value,
-                                    profitLoss = profit.value,
-                                    taxes = taxes.value,
-                                    isProfit = isLossChecked
-                                ),
-                                popScreen
-                            )
-                        }
+                        viewModel.addCompanyExpense(
+                            popScreen
+                        )
                     }
                 ) {
-                    Text(text = "Add Expense")
+                    Text(text = if (viewModel.isEditScreen.value) "Edit Expense" else "Add Expense")
                 }
             }
         }
     }
+
+    if (isPickerVisible) {
+
+        DatePicker(
+            pickerState = pickerState,
+            onSave = { start, end ->
+                isPickerVisible = false
+                selectedStartMonth = start!!.formatDate()
+                selectedEndMonth = end!!.formatDate()
+                viewModel.onStartDateChange(start)
+                viewModel.onEndDateChange(end)
+                viewModel.onMonthChange(getMonth(start.toMonth(), end.toMonth()))
+            },
+            onDismiss = {
+                isPickerVisible = false
+            }
+        )
+
+        if (expense.endDate != null) {
+            pickerState.setSelection(
+                startDateMillis = expense.startDate,
+                endDateMillis = expense.endDate
+            )
+        }
+    }
 }
+
+fun getMonth(selectedStartMonth: String, selectedEndMonth: String) = if (selectedStartMonth == selectedEndMonth)
+    selectedEndMonth
+else
+    "$selectedStartMonth - $selectedEndMonth"

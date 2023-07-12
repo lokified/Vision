@@ -67,7 +67,7 @@ fun NewCompanyScreen(
                     }
                 },
                 title = {
-                    Text(text = "New Company")
+                    Text(text = "New OtherCompany")
                 }
             )
         }
