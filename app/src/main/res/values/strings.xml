@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Vision</string>
 
+    <string name="default_notification_channel_id" translatable="false">VISION_APP_NOTIFICATION</string>
+
     <string name="britam_biashara_content">This is a simplified combined solution tailored for SMEs. It is designed as a self-rated product, where the customer chooses the different solutions. Political Violence &amp; Terrorism Cover are extended up to a limit. Britam Biashara also offers relaxed Warranties &amp; Conditions. </string>
     <string name="theft_insurance_content">This provides cover for theft or attempted theft of goods occurring at the Insured\'s business premises, resulting from forcible or violent entry or exit.</string>
     <string name="cyber_insurance_content">Cyber liability insurance is designed for all businesses, Corporates, Small and Medium Enterprise entities. The cover protects your business against common cyber threats, such as ransomware, and against new techniques used by criminals to steal or interrupt data. The most common threat is data breaches and losses e.g., network security breaches, loss of private data and theft of intellectual property.</string>
@@ -23,4 +25,5 @@
     <string name="endowmend_content">An endowment fund is the ideal investment tool for organisations that receive donations and grants such as non-profit organizations, museums, churches, or hospitals. It is an investment fund established by the foundation and managed by Britam Asset Managers. The fund makes consistent withdrawals from invested donations which acts as capital.</string>
     <string name="gratuity_content">Britam Asset Managers in collaboration with organisations set up Gratuity Funds which are defined retirement benefit plans offered by companies to employees upon leaving their jobs. Gratuity payment and its applicable terms and conditions are stipulated in one’s employment contract as well as the employer’s policies. These funds offer various benefits being a valuable part of the overall remuneration package.</string>
     <string name="unknown_content">Visit our website</string>
+    <string name="notification_message">Enabling Notifications helps you get latest news from the market that would help you structure your business well.</string>
 </resources>
