@@ -44,8 +44,13 @@ class LoginViewModel @Inject constructor(
 
             try {
                 isLoading.value = true
+
+                //logins user
                 firebase.authenticate(email, password)
+
+                //saves logged in user
                 saveUser()
+
                 isLoading.value = false
                 openAndPopUp(Screens.HomeScreen.route, Screens.OnBoardingScreen.route)
             }
@@ -60,7 +65,7 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch {
             firebase.currentUser.collect { user ->
-                datastore.saveUser(
+               updateUser(
                     User(
                         name = user.username,
                         email = user.email,
