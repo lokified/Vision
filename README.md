@@ -20,16 +20,16 @@ Vision is an android app that business person can use to manage their business. 
 
 ### Auth
 <div display="flex"> 
-  <img src="https://github.com/lokified/Vision/assets/87479198/b2d066fa-921c-4c7e-bdd4-dcd6df1f4dbf" width=20% height=30% >
-  <img src="https://github.com/lokified/Vision/assets/87479198/01084ad5-7a05-42a6-9bd9-3910955fcc1e" width=20% height=30% >
+  <img src="https://github.com/lokified/Vision/assets/87479198/cb2729e4-1618-45e4-bc57-2b6166c90e4f" width=20% height=30% >
+  <img src="https://github.com/lokified/Vision/assets/87479198/2fcdc08f-2aa8-4fe2-85de-06341833ec70" width=20% height=30% >
 </div>
 
 ### Home
 <div display="flex"> 
-  <img src="https://github.com/lokified/Vision/assets/87479198/d7002866-2a03-47ab-8139-373f97b519c7" width=20% height=30% >
-  <img src="https://github.com/lokified/Vision/assets/87479198/a8475572-2ede-4b49-9809-ef316ce6f763" width=20% height=30% >
-  <img src="https://github.com/lokified/Vision/assets/87479198/8c04a8fc-d56a-4872-b8cc-bf2d17dce32d" width=20% height=30% >
-  <img src="https://github.com/lokified/Vision/assets/87479198/943f3181-818c-47fe-af80-b1481734bf62" width=20% height=30% >
+  <img src="https://github.com/lokified/Vision/assets/87479198/0ed581a6-30e7-43c5-a104-1e14d6707751" width=20% height=30% >
+  <img src="https://github.com/lokified/Vision/assets/87479198/7a1725a7-e734-4a88-ac53-fa532fadb995" width=20% height=30% >
+  <img src="https://github.com/lokified/Vision/assets/87479198/925bcc6f-3995-40f0-a410-e0470725b960" width=20% height=30% >
+  <img src="https://github.com/lokified/Vision/assets/87479198/6dc775d5-40eb-4faa-861d-d01afd65e3e8" width=20% height=30% >
 </div>
 
 
