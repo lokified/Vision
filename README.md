@@ -3,13 +3,18 @@ Vision is an android app that business person can use to manage their business. 
 
 [Download Apk](https://drive.google.com/file/d/1PC3P0inSWDCii4GUttJUKFBfNjrnXDFn/view?usp=drive_link)
 
-The app utilizes firebase features.
+#### The app utilizes firebase features.
 * Firebase authentication - this includes login and signup with an email.
 * Firebase firestore - all the data is stored in the database.
 * Firebase Cloud Messaging - App uses push notification from the firebase sdk that can be used for advertisement and passing information about the app
 * Firebase perfomance - one can monitor the perfomance of the app where it has traces attached to main functions of the app
 * Firebase crashlytics - one can view crash logs of the app
 
+#### Features
+* User can create an account and login.
+* User can create a new company which will have default empty data.
+* User can add and edit their expenses for a particlar month.
+* User can logout.
   
 ## Screenshots
 
